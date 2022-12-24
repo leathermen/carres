@@ -1,8 +1,30 @@
 base:
   dev:
     done:
-    todo:
       - imagine the whole project
+        - requirements
+          - front page without auth that allows you to book a car using the email
+          - my reservations page authorized by email
+          - admin dashboard to control vehicles to book
+          - admin dashboard to cancel the reservations
+        - spring + svelte
+        - dockerized
+        - deployed to self brewed kubernetes at digital ocean
+        - processed with github actions
+      - create READMEs
       - create the estimated plan
-      - 
+    todo:
+      -
+        - basic spring project w/actuator
+        - basic svelte project w/test api call
+        - some auth service embedded into the api
+        - basic authorized page
+      -
+        - set up domain layer
+        - attach hibernate to start persisting data
+        - introduce some data seeding (database population)
+      - create admin vehicles control screen
+      - create new reservations screen
+      - create my reservations screen
+      - create admin cancel reservations screen
   postdev:
