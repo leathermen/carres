@@ -15,8 +15,8 @@ base:
       - create the estimated plan
     todo:
       -
-        - basic spring project w/actuator
-        - basic svelte project w/test api call
+        - basic spring project w/actuator //done
+        - basic svelte project w/test api call //done
         - some auth service embedded into the api
         - basic authorized page
       -
