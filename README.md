@@ -5,7 +5,7 @@ This is a test project. It's created to put together all the knowledge I have ab
 ## Applications and parts
 
 - [Spring Boot API](apps/api/README.md)
-- [Svelte frontend app](apps/website/README.md)
+- [React (Next.js) frontend app](apps/website/README.md)
 
 ## Ideas
 
@@ -14,6 +14,11 @@ This whole project is expected to visualize the idea of the web application. The
 The project is hosted at Digital Ocean, using Kubernetes setup.
 The Continuous Integration is done using GitHub actions.
 The secrets are managed using Hashicorp Vault.
+
+## Remarkable elements (you should better take a look at)
+
+- [**Public Sonarcloud report**](https://sonarcloud.io/project/overview?id=leathermen_carres_api)
+- [TODO public Grafana dashboard of business metrics](somewhere)
 
 ## Credits
 
