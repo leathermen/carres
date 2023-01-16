@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CurrentDateController {
 
-  @GetMapping("/open/date")
+  @GetMapping("/api/v1/open/date")
   public String getCurrentDate() {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/mm/dd HH:mm:ss");
     return simpleDateFormat.format(new Date());

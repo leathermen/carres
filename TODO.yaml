@@ -7,18 +7,19 @@ base:
           - my reservations page authorized by email
           - admin dashboard to control vehicles to book
           - admin dashboard to cancel the reservations
-        - spring + svelte
+        - spring + react
         - dockerized
         - deployed to self brewed kubernetes at digital ocean
         - processed with github actions
       - create READMEs
       - create the estimated plan
-    todo:
       -
-        - basic spring project w/actuator //done
-        - basic svelte project w/test api call //done
-        - some auth service embedded into the api
-        - basic authorized page
+        - + basic spring project w/actuator
+        - + basic react project w/test api call
+        - + some auth service embedded into the api
+        - + basic authorized page
+        - + make authenticated api call to return the token contents
+    todo:
       -
         - set up domain layer
         - attach hibernate to start persisting data
