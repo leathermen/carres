@@ -1,12 +1,13 @@
 import NextAuth from "next-auth";
 import Keycloak from "next-auth/providers/keycloak";
+import refreshAccessToken from "./refreshAccessToken";
 
 const options = {
   providers: [
     Keycloak({
       clientId: process.env.KEYCLOAK_CLIENT_ID,
       clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
-      issuer: process.env.KEYCLOAK_WELL_KNOWN_ADDRESS,
+      issuer: process.env.KEYCLOAK_REALM_ADDRESS,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
@@ -16,10 +17,16 @@ const options = {
         return {
           ...token,
           accessToken: account.access_token,
+          accessTokenExpires: account.expires_at * 1000,
           refreshToken: account.refresh_token,
         };
       }
-      return token;
+
+      if (Date.now() < token.accessTokenExpires) {
+        return token;
+      }
+
+      return refreshAccessToken(token);
     },
     async session({ session, token }) {
       session.user.accessToken = token.accessToken;
