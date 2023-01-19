@@ -1,6 +1,5 @@
 import 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
-import Link from "next/link";
 
 export default function Header() {
   const handleSignin = (e: React.MouseEvent) => {
@@ -15,20 +14,18 @@ export default function Header() {
   const { data: session } = useSession();
 
   return (
-    <div className="header">
-      <Link legacyBehavior href="/">
-        <a className="logo">AppLogo</a>
-      </Link>
-      {session && (
-        <a href="#" onClick={handleSignout} className="btn-signin">
-          SIGN OUT
-        </a>
-      )}
-      {!session && (
-        <a href="#" onClick={handleSignin} className="btn-signin">
-          SIGN IN
-        </a>
-      )}
-    </div>
+    <header className="d-flex justify-content-center py-3">
+      <ul className="nav nav-pills">
+        <li className="nav-item"><a href="#" className="nav-link active" aria-current="page">Home</a></li>
+        <li className="nav-item"><a href="#" className="nav-link">My Reservations</a></li>
+        <li className="nav-item"><a href="#" className="nav-link">Dashboard</a></li>
+        {session && (
+          <li className="nav-item"><a href="#" onClick={handleSignout} className="nav-link">Sign Out</a></li>
+        )}
+        {!session && (
+          <li className="nav-item"><a href="#" onClick={handleSignin} className="nav-link">Sign In</a></li>
+        )}
+      </ul>
+    </header>
   );
 }
