@@ -4,6 +4,7 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Header from '../components/Header';
+import { makeApiCall } from '../utils/client';
 
 const RESERVATION_COOKIE_NAME = "i_need_reservations";
 
@@ -22,11 +23,6 @@ export default function Home({ needsReservationsServerSide: needsReservationsCoo
     setCookie(RESERVATION_COOKIE_NAME, "true");
     setNeedsReservations(true);
   };
-
-  // const { data, status } = useSession();
-  // const loading = status === "loading"
-
-  // const session = data as Session & { user: { accessToken: string, refreshToken: string } } | null;
 
   return (
     <>

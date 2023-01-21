@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import Keycloak from "next-auth/providers/keycloak";
-import refreshAccessToken from "./refreshAccessToken";
+import refreshAccessToken from "../../../utils/api/refreshAccessToken";
 
 const options = {
   providers: [

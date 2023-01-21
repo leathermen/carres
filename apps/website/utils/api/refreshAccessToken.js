@@ -34,11 +34,11 @@ export default async function refreshAccessToken(token) {
       refreshToken: refreshRes.data.refresh_token ?? token.refreshToken,
     };
   } catch (error) {
-    console.error(error);
+    console.error(error.message || error);
 
     return {
       ...token,
-      error: "RefreshAccessTokenError",
+      error: error.message || error,
     };
   }
 }
