@@ -11,7 +11,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class WebSecurityConfig {
 
-  //hello
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
@@ -20,7 +19,9 @@ public class WebSecurityConfig {
       .csrf()
       .disable()
       .authorizeHttpRequests(requests -> {
-        requests.requestMatchers("/actuator/**", "/api/*/open/**").permitAll();
+        requests
+          .requestMatchers("/actuator/**", "/api/*/open/**", "/swagger-ui/**", "/v3/api-docs/**")
+          .permitAll();
         requests.anyRequest().authenticated();
       })
       .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);

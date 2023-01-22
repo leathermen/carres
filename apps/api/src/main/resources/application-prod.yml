@@ -3,4 +3,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://example.com
+          issuer-uri: https://sso.carres.nikitades.com

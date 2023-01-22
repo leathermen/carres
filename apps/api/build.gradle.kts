@@ -2,6 +2,7 @@ plugins {
   java
   id("org.springframework.boot") version "3.0.1"
   id("io.spring.dependency-management") version "1.1.0"
+  id("io.freefair.lombok") version "6.6.1"
 
   id("org.sonarqube") version "3.5.0.2730"
   jacoco
@@ -22,6 +23,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-security")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
   implementation("org.postgresql:postgresql")
 
