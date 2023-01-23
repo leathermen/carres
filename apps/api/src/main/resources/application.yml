@@ -4,6 +4,26 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://example.com
+  datasource:
+    url:
+    username:
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    mapping-resources:
+      - hibernate/mapping/Car.hbm.xml
+      - hibernate/mapping/Reservation.hbm.xml
+  flyway:
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    sql-migration-prefix: V
+    repeatable-sql-migration-prefix: R
+    sql-migration-separator: __
+    sql-migration-suffixes: .sql
+    locations:
+      - classpath:db/migration
 
 springdoc:
   swagger-ui:

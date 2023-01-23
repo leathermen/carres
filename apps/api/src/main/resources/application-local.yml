@@ -4,3 +4,16 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:3001/auth/realms/carres
+  datasource:
+    url: jdbc:postgresql://localhost:5433/carres
+    username: carres
+    password: carres
+  jpa:
+    properties:
+      javax:
+        persistence:
+          schema-generation:
+            create-source: metadata
+            scripts:
+              action: update
+              create-target: src/main/resources/db/migration/Vx_x_x__new_migration.sql
