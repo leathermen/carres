@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="com.nikitades.carres.domain.Reservation" table="reservations">
+    <id name="id" type="uuid-char" column="id" />
+    <property name="startsAt" type="timestamp">
+      <column name="starts_at" />
+    </property>
+    <property name="endsAt" type="timestamp">
+      <column name="ends_at" />
+    </property>
+    <property name="clientEmail" type="text">
+      <column name="client_email" />
+    </property>
+    <property name="createdAt" type="timestamp">
+      <column name="created_at" />
+    </property>
+    <property name="cancelled" type="boolean">
+      <column name="is_cancelled" />
+    </property>
+    <many-to-one foreign-key="reservation_car" name="car" class="com.nikitades.carres.domain.Car" column="car_id"
+      not-null="true" cascade="all" />
+  </class>
+</hibernate-mapping>
