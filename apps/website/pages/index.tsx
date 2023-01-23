@@ -14,8 +14,6 @@ interface HomeProps {
 
 export default function Home({ needsReservationsServerSide: needsReservationsCookie }: HomeProps) {
 
-  console.log({ needsReservationsServerSide: needsReservationsCookie });
-
   const [needsReservations, setNeedsReservations] = useState(needsReservationsCookie);
 
   const iNeedReservation = (e: React.MouseEvent<HTMLButtonElement>): void => {
