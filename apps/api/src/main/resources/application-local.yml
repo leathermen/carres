@@ -1,4 +1,8 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/carres
+    username: carres
+    password: carres
   security:
     oauth2:
       resourceserver:

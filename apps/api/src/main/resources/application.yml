@@ -4,7 +4,27 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://example.com
+  datasource:
+    url:
+    username:
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    enabled: true
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    change-log: classpath:db/changelog.sql
+    driver-class-name: org.postgresql.Driver
+    clearChecksums: true
 
 springdoc:
   swagger-ui:
     path: /open/swagger-ui
+
+# logging:
+#   level:
+    # root: DEBUG
+
