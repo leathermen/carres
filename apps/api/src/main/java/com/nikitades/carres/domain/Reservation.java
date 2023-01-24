@@ -1,5 +1,9 @@
 package com.nikitades.carres.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import java.util.Date;
 import java.util.UUID;
 import lombok.Getter;
@@ -7,15 +11,28 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
 public class Reservation {
 
+  @Id
   private UUID id;
+
+  @ManyToOne
   private Car car;
-  private UUID carId;
+
+  @Column
   private Date startsAt;
+
+  @Column
   private Date endsAt;
+
+  @Column
   private String clientEmail;
+
+  @Column
   private Date createdAt;
+
+  @Column
   private boolean cancelled;
 
   public Reservation(

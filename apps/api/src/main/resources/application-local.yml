@@ -1,13 +1,13 @@
+datasource:
+  url: postgresql://localhost:5433/carres
+  username: carres
+  password: carres
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:3001/auth/realms/carres
-  datasource:
-    url: jdbc:postgresql://localhost:5433/carres
-    username: carres
-    password: carres
   jpa:
     properties:
       javax:

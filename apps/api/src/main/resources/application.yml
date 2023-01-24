@@ -1,3 +1,7 @@
+datasource:
+  url:
+  username:
+  password:
 spring:
   security:
     oauth2:
@@ -5,25 +9,19 @@ spring:
         jwt:
           issuer-uri: http://example.com
   datasource:
-    url:
-    username:
-    password:
+    url: jdbc:${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
+  r2dbc:
+    url: r2dbc:${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
   jpa:
     hibernate:
       ddl-auto: validate
-    mapping-resources:
-      - hibernate/mapping/Car.hbm.xml
-      - hibernate/mapping/Reservation.hbm.xml
-  flyway:
-    url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
-    sql-migration-prefix: V
-    repeatable-sql-migration-prefix: R
-    sql-migration-separator: __
-    sql-migration-suffixes: .sql
-    locations:
-      - classpath:db/migration
+  liquibase:
+    enabled: true
+    change-log: src/main/resources/changelog.sql
 
 springdoc:
   swagger-ui:
