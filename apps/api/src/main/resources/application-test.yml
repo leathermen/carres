@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:carres;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: carres
+    password: carres
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
