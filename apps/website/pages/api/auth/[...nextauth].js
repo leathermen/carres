@@ -14,11 +14,13 @@ const options = {
   callbacks: {
     async jwt({ token, user, account }) {
       if (account && user) {
+        console.log("AUTH!", account);
         return {
           ...token,
           accessToken: account.access_token,
           accessTokenExpires: account.expires_at * 1000,
           refreshToken: account.refresh_token,
+          idToken: account.id_token,
         };
       }
 
@@ -29,9 +31,12 @@ const options = {
       return refreshAccessToken(token);
     },
     async session({ session, token }) {
-      session.user.accessToken = token.accessToken;
-      session.user.refreshToken = token.refreshToken;
-      session.user.accessTokenExpires = token.accessTokenExpires;
+      session.tokenSet = {
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
+        accessTokenExpires: token.accessTokenExpires,
+        idToken: token.idToken,
+      };
 
       return session;
     },

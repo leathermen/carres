@@ -1,17 +1,29 @@
 import 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
+import { Session, User } from 'next-auth';
 
 export default function Header() {
-  const handleSignin = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleSignin = () => {
     signIn('keycloak');
   };
-  const handleSignout = (e: React.MouseEvent) => {
-    e.preventDefault();
-    signOut();
+  const handleSignout = (idToken: string) => {
+    signOut({
+      callbackUrl: '/auth/realms/carres/protocol/openid-connect/logout?id_token_hint=' + idToken,
+    });
   };
 
-  const { data: session } = useSession();
+  const { data: session } = useSession() as {
+    data: Session & {
+      tokenSet?: {
+        accessToken: string;
+        accessTokenExpires: number;
+        refreshToken: string;
+        idToken: string;
+      }
+    }
+  };
+
+  const idToken = session?.tokenSet?.idToken;
 
   return (
     <header className="d-flex justify-content-center py-3">
@@ -19,11 +31,11 @@ export default function Header() {
         <li className="nav-item"><a href="#" className="nav-link active" aria-current="page">Home</a></li>
         <li className="nav-item"><a href="#" className="nav-link">My Reservations</a></li>
         <li className="nav-item"><a href="#" className="nav-link">Dashboard</a></li>
-        {session && (
-          <li className="nav-item"><a href="#" onClick={handleSignout} className="nav-link">Sign Out</a></li>
+        {idToken && (
+          <li className="nav-item"><a href="#" onClick={() => handleSignout(idToken)} className="nav-link">Sign Out</a></li>
         )}
-        {!session && (
-          <li className="nav-item"><a href="#" onClick={handleSignin} className="nav-link">Sign In</a></li>
+        {!idToken && (
+          <li className="nav-item"><a href="#" onClick={() => handleSignin()} className="nav-link">Sign In</a></li>
         )}
       </ul>
     </header>
