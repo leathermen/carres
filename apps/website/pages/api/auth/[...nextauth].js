@@ -14,7 +14,6 @@ const options = {
   callbacks: {
     async jwt({ token, user, account }) {
       if (account && user) {
-        console.log("AUTH!", account);
         return {
           ...token,
           accessToken: account.access_token,
@@ -37,6 +36,10 @@ const options = {
         accessTokenExpires: token.accessTokenExpires,
         idToken: token.idToken,
       };
+
+      if (token.tokenRefreshError) {
+        session.tokenRefreshError = token.tokenRefreshError;
+      }
 
       return session;
     },

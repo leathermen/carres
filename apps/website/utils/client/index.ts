@@ -1,3 +1,3 @@
-import { makeApiCall } from "./apiClient";
+import { getReservations } from "./apiClient";
 
-export { makeApiCall };
+export { getReservations };

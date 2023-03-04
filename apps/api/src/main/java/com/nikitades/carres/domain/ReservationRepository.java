@@ -1,3 +1,7 @@
 package com.nikitades.carres.domain;
 
-public interface ReservationRepository {}
+import java.util.List;
+
+public interface ReservationRepository {
+  List<Reservation> findAll();
+}

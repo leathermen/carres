@@ -8,7 +8,7 @@ export default function Header() {
   };
   const handleSignout = (idToken: string) => {
     signOut({
-      callbackUrl: '/auth/realms/carres/protocol/openid-connect/logout?id_token_hint=' + idToken,
+      callbackUrl: '/auth/realms/carres/protocol/openid-connect/logout?id_token_hint=' + idToken + '&post_logout_redirect_uri=http://localhost:3001',
     });
   };
 

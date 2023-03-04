@@ -19,7 +19,7 @@ public class InfoController {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        content = { @Content(schema = @Schema(implementation = ProfileInfoDTO.class)) }
+        content = { @Content(schema = @Schema(implementation = ProfileInfoDto.class)) }
       ),
       @ApiResponse(
         responseCode = "401",
@@ -29,8 +29,8 @@ public class InfoController {
     }
   )
   @GetMapping("/api/v1/info")
-  public ProfileInfoDTO getInfo(JwtAuthenticationToken principal) {
-    return new ProfileInfoDTO(
+  public ProfileInfoDto getInfo(JwtAuthenticationToken principal) {
+    return new ProfileInfoDto(
       principal.getToken().getClaim("name"),
       principal.getToken().getClaim("email")
     );

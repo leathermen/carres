@@ -29,16 +29,16 @@ export default async function refreshAccessToken(token) {
     return {
       ...token,
       accessToken: refreshRes.data.access_token,
-      accessTokenExpires:
-        +new Date() + refreshRes.data.refresh_expires_in * 1000,
+      accessTokenExpires: +new Date() + refreshRes.data.refresh_expires_in * 1000,
       refreshToken: refreshRes.data.refresh_token ?? token.refreshToken,
+      idToken: refreshRes.data.id_token ?? token.idToken,
     };
   } catch (error) {
     console.error(error.message || error);
 
     return {
       ...token,
-      error: error.message || error,
+      tokenRefreshError: error.message || error,
     };
   }
 }

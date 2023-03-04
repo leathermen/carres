@@ -1,26 +1,39 @@
 import { hasCookie, setCookie } from 'cookies-next';
 import type { GetServerSideProps } from 'next';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Header from '../components/Header';
-import { makeApiCall } from '../utils/client';
+import ReservationListElement from '../components/ReservationListElement';
+import { getReservations } from '../utils/client';
+import Reservation from '../utils/client/types/Reservation';
 
 const RESERVATION_COOKIE_NAME = "i_need_reservations";
 
 interface HomeProps {
   needsReservationsServerSide: boolean;
+  reservationsServerSide: Reservation[];
 }
 
-export default function Home({ needsReservationsServerSide: needsReservationsCookie }: HomeProps) {
+export default function Home({ needsReservationsServerSide, reservationsServerSide }: HomeProps) {
 
-  const [needsReservations, setNeedsReservations] = useState(needsReservationsCookie);
+  const { data: session, status } = useSession();
+  const [needsReservations, setNeedsReservations] = useState(needsReservationsServerSide);
 
   const iNeedReservation = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     setCookie(RESERVATION_COOKIE_NAME, "true");
     setNeedsReservations(true);
   };
+
+  const [reservations, setReservations] = useState(reservationsServerSide);
+
+  useEffect(() => {
+    if (status === 'authenticated' && needsReservations) {
+      getReservations().then(data => setReservations(data.items));
+    }
+  }, [needsReservations, status]);
 
   return (
     <>
@@ -47,10 +60,20 @@ export default function Home({ needsReservationsServerSide: needsReservationsCoo
               </div>
             </div>
           )}
-          {needsReservations && (
+          {needsReservations && status === 'unauthenticated' && (
             <div className="px-4 py-5 my-5 text-center">
-              <div className="col-lg-6 mx-auto">
+              <div className="col-lg-9 mx-auto">
+                <p className="leam mb-4">Please log in to see reservations ({status})</p>
+              </div>
+            </div>
+          )}
+          {needsReservations && status === 'authenticated' && (
+            <div className="px-4 py-5 my-5 text-center">
+              <div className="col-lg-9 mx-auto">
                 <p className="leam mb-4">Reservations</p>
+                <div>
+                  {reservations.map(r => <ReservationListElement key={r.id} />)}
+                </div>
               </div>
             </div>
           )}
@@ -61,7 +84,15 @@ export default function Home({ needsReservationsServerSide: needsReservationsCoo
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
+  let reservationsServerSide = [] as Reservation[];
+
+  if (hasCookie('next-auth.session-token')) {
+    const reservations = await getReservations(true);
+    reservationsServerSide = reservations.items;
+  }
+
+  const needsReservationsServerSide = hasCookie(RESERVATION_COOKIE_NAME, { req, res })
   return {
-    props: { needsReservationsServerSide: hasCookie(RESERVATION_COOKIE_NAME, { req, res }) }
+    props: { needsReservationsServerSide, reservationsServerSide }
   };
 };
