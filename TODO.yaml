@@ -3,29 +3,35 @@ base:
     done:
       - imagine the whole project
         - requirements
-          - front page without auth that allows you to book a car using the email
-          - my reservations page authorized by email
-          - admin dashboard to control vehicles to book
-          - admin dashboard to cancel the reservations
+        - front page without auth that allows you to book a car using the email
+        - my reservations page authorized by email
+        - admin dashboard to control vehicles to book
+        - admin dashboard to cancel the reservations
         - spring + react
         - dockerized
         - deployed to self brewed kubernetes at digital ocean
         - processed with github actions
       - create READMEs
       - create the estimated plan
-      -
-        - + basic spring project w/actuator
+      - - + basic spring project w/actuator
         - + basic react project w/test api call
         - + some auth service embedded into the api
         - + basic authorized page
         - + make authenticated api call to return the token contents
+      - + set up domain layer
+        + attach hibernate to start persisting data
+        + introduce some data seeding (database population)
     todo:
-      -
-        - set up domain layer
-        - attach hibernate to start persisting data
-        - introduce some data seeding (database population)
-      - create admin vehicles control screen
-      - create new reservations screen
       - create my reservations screen
+      - create "make new reservation" screen
+      - create role based access control
+        - make fe bundle check the roles
+        - make be check the roles at the controller level
       - create admin cancel reservations screen
+      - create admin vehicles control screen
   postdev:
+    - deploy at k8s
+    - ci/cd pipeline
+    - grafana metrics & public dashboards
+    - google, github and linked in IDPs
+    - revisit readmes

@@ -24,6 +24,8 @@ spring:
     # database-platform: org.hibernate.dialect.PostgreSQLDialect
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: false
+    hibernate:
+      ddl-auto: none
     properties:
       jakarta:
         persistence:

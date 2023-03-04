@@ -19,6 +19,9 @@ public class Reservation {
   @Id
   private UUID id;
 
+  @Column
+  private UUID ownerId;
+
   @ManyToOne(optional = false)
   private Car car;
 
@@ -27,9 +30,6 @@ public class Reservation {
 
   @Column
   private Date endsAt;
-
-  @Column
-  private String clientEmail;
 
   @Column
   private Date createdAt;

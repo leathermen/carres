@@ -84,8 +84,8 @@ VALUES (
 
 INSERT INTO public.reservations (
     id,
+    owner_id,
     cancelled,
-    client_email,
     created_at,
     ends_at,
     starts_at,
@@ -93,8 +93,8 @@ INSERT INTO public.reservations (
   )
 VALUES (
     '5c9ded5d-fd0b-41ac-8273-05268bf685dd',
+    '34db4e9a-70a8-4127-8292-990acc7f5f24',
     false,
-    'dumbledore@hogwarts.com',
     '2023-02-03 10:00:00',
     '2023-02-06 12:45:00',
     '2023-02-06 12:00:00',
@@ -102,8 +102,8 @@ VALUES (
   );
 INSERT INTO public.reservations (
     id,
+    owner_id,
     cancelled,
-    client_email,
     created_at,
     ends_at,
     starts_at,
@@ -111,8 +111,8 @@ INSERT INTO public.reservations (
   )
 VALUES (
     'f451e19c-fe1a-4196-ba59-fb147b9a3e24',
+    '34db4e9a-70a8-4127-8292-990acc7f5f24',
     true,
-    'hagrid@hogwarts.com',
     '2023-02-06 20:26:14',
     '2023-02-08 17:15:00',
     '2023-02-08 16:15:00',
@@ -120,8 +120,8 @@ VALUES (
   );
 INSERT INTO public.reservations (
     id,
+    owner_id,
     cancelled,
-    client_email,
     created_at,
     ends_at,
     starts_at,
@@ -129,8 +129,8 @@ INSERT INTO public.reservations (
   )
 VALUES (
     'c2e44fe1-8415-4aed-be05-f047e4022f33',
+    '34db4e9a-70a8-4127-8292-990acc7f5f24',
     false,
-    'mcgonagall@hogwarts.com',
     '2023-01-25 14:17:17',
     '2023-02-11 20:45:00',
     '2023-02-11 20:00:00',

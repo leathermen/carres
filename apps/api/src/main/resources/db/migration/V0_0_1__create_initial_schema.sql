@@ -12,11 +12,11 @@ create table cars (
 create table reservations (
   id uuid not null,
   cancelled boolean,
-  client_email varchar(255),
   created_at timestamp(6),
   ends_at timestamp(6),
+  owner_id uuid,
   starts_at timestamp(6),
-  car_id uuid,
+  car_id uuid not null,
   primary key (id)
 );
 alter table if exists reservations
