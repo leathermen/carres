@@ -44,13 +44,7 @@ services:
       KC_DB_URL: jdbc:postgresql://database:5432/keycloak
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: keycloak
-    command:
-      [
-        "--verbose",
-        "import",
-        "--override=false",
-        "--file=/opt/keycloak/realm.json",
-      ]
+    command: ["--verbose", "import", "--override=false", "--file=/opt/keycloak/realm.json"]
   keycloak:
     image: nikitades/carres-keycloak:latest
     build: apps/keycloak
@@ -70,13 +64,17 @@ services:
       KC_DB_PASSWORD: keycloak
       KC_HOSTNAME_URL: http://localhost:3001/auth
       KC_HOSTNAME_ADMIN_URL: http://localhost:3001/auth
-    command:
-      [
-        "start",
-        "--optimized",
-        "--http-enabled=true",
-        "--hostname-strict-https=false",
-      ]
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080 --realm master --user admin --password password || exit 1",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 2
+      start_period: 15s
+    command: ["start", "--optimized", "--http-enabled=true", "--hostname-strict-https=false"]
   database:
     image: postgres:15
     user: postgres

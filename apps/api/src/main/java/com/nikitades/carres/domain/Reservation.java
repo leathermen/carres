@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.util.Date;
 import java.util.UUID;
 import lombok.Getter;
@@ -12,12 +13,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Table(name = "reservations")
 public class Reservation {
 
   @Id
   private UUID id;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
   private Car car;
 
   @Column
@@ -34,6 +36,8 @@ public class Reservation {
 
   @Column
   private boolean cancelled;
+
+  private Reservation() {}
 
   public Reservation(
     UUID id,
