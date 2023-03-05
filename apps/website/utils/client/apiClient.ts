@@ -2,6 +2,7 @@ import axios from "axios";
 import { Session } from "next-auth";
 import { getSession, signIn } from "next-auth/react";
 import { Token } from "../session/Token";
+import { RefreshTokenExpiredError } from "./types/RefreshTokenExpiredError";
 import ReservationResponse from "./types/ReservationResponse";
 
 let token: Token | null = null;
@@ -37,7 +38,7 @@ const makeApiCall = async <TRequest, TResponse>(
         | null;
 
       if (status === 401 && !!session?.tokenRefreshError) {
-        signIn("keycloak");
+        throw new RefreshTokenExpiredError();
       }
     }
   );

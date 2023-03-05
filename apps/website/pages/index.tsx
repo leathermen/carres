@@ -1,12 +1,13 @@
 import { hasCookie, setCookie } from 'cookies-next';
 import type { GetServerSideProps } from 'next';
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Header from '../components/Header';
 import ReservationListElement from '../components/ReservationListElement';
 import { getReservations } from '../utils/client';
+import { RefreshTokenExpiredError } from '../utils/client/types/RefreshTokenExpiredError';
 import Reservation from '../utils/client/types/Reservation';
 
 const RESERVATION_COOKIE_NAME = "i_need_reservations";
@@ -31,7 +32,11 @@ export default function Home({ needsReservationsServerSide, reservationsServerSi
 
   useEffect(() => {
     if (status === 'authenticated' && needsReservations) {
-      getReservations().then(data => setReservations(data.items));
+      getReservations().then(data => setReservations(data.items)).catch(error => {
+        if (error instanceof RefreshTokenExpiredError) {
+          signIn('keycloak');
+        }
+      });
     }
   }, [needsReservations, status]);
 
