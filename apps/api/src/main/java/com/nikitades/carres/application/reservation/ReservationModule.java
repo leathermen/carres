@@ -14,6 +14,6 @@ public class ReservationModule {
   private final ReservationRepository reservationRepository;
 
   public List<Reservation> getReservations(UUID userId) {
-    return reservationRepository.findByOwnerId(userId);
+    return reservationRepository.findByOwnerIdOrderByStartsAtDesc(userId);
   }
 }

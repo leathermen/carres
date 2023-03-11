@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,13 +26,13 @@ public class Reservation {
   private Car car;
 
   @Column
-  private Date startsAt;
+  private Instant startsAt;
 
   @Column
-  private Date endsAt;
+  private Instant endsAt;
 
   @Column
-  private Date createdAt;
+  private Instant createdAt;
 
   @Column
   private boolean cancelled;
@@ -41,20 +41,20 @@ public class Reservation {
 
   public Reservation(
     UUID id,
+    UUID ownerId,
     Car car,
-    Date startsAt,
+    Instant startsAt,
     int durationMinutes,
-    String clientEmail,
-    Date createdAt
+    Instant createdAt
   ) {
     if (durationMinutes < 15) {
       throw new IllegalArgumentException("Minimal reservation duration is 15 minutes.");
     }
     this.id = id;
+    this.ownerId = ownerId;
     this.car = car;
     this.startsAt = startsAt;
-    this.endsAt = new Date(startsAt.getTime() + durationMinutes * 60000);
-    this.clientEmail = clientEmail;
+    this.endsAt = Instant.ofEpochMilli(startsAt.getEpochSecond() + durationMinutes * 60000);
     this.createdAt = createdAt;
     this.cancelled = false;
   }

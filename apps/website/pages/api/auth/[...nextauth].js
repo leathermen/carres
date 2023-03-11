@@ -8,6 +8,9 @@ const options = {
       clientId: process.env.KEYCLOAK_CLIENT_ID,
       clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
       issuer: process.env.KEYCLOAK_REALM_ADDRESS,
+      profile: (profile) => {
+        return { ...profile, id: profile.sub };
+      },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
@@ -20,6 +23,7 @@ const options = {
           accessTokenExpires: account.expires_at * 1000,
           refreshToken: account.refresh_token,
           idToken: account.id_token,
+          roles: user.roles,
         };
       }
 
@@ -36,6 +40,8 @@ const options = {
         accessTokenExpires: token.accessTokenExpires,
         idToken: token.idToken,
       };
+
+      session.roles = token.roles;
 
       if (token.tokenRefreshError) {
         session.tokenRefreshError = token.tokenRefreshError;

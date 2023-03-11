@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class ReservationResponse {
+public class ReservationsResponse {
 
   private final List<ReservationDto> items;
 }

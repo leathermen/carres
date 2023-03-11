@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <SessionProvider session={pageProps.session}>
       <ThemeProvider>
         <Component {...pageProps} />
-      </ThemeProvider>;
+      </ThemeProvider>
     </SessionProvider>
   )
 }

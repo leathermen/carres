@@ -23,7 +23,15 @@ base:
         + introduce some data seeding (database population)
     todo:
       - create my reservations screen
+        + the outlook is done
+        - cover with tests
       - create "make new reservation" screen
+        + the outlook is done
+        - cover with tests
+      - create single new reservation screen
+        - create the outlook
+        - create the api response with the occupied hours
+        - cover with tests
       - create role based access control
         - make fe bundle check the roles
         - make be check the roles at the controller level

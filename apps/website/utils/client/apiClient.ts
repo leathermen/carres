@@ -1,18 +1,24 @@
 import axios from "axios";
 import { Session } from "next-auth";
-import { getSession, signIn } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { Token } from "../session/Token";
+import CarsResponse from "./types/CarsResponse";
 import { RefreshTokenExpiredError } from "./types/RefreshTokenExpiredError";
 import ReservationResponse from "./types/ReservationResponse";
 
 let token: Token | null = null;
 
-const getReservations = async (server = false) => {
-  console.log({ server });
-  if (server) {
-    console.log({ token: getActiveToken() });
-  }
+const getReservations = async () => {
   return await makeApiCall<null, ReservationResponse>("get", "/api/v1/reservations");
+};
+
+const getCars = async () => {
+  return await makeApiCall<null, CarsResponse>("get", "/api/v1/cars/available");
+};
+
+const reloadSession = () => {
+  const event = new Event("visibilitychange");
+  document.dispatchEvent(event);
 };
 
 const makeApiCall = async <TRequest, TResponse>(
@@ -26,6 +32,8 @@ const makeApiCall = async <TRequest, TResponse>(
     baseURL: process.env.NEXT_PUBLIC_API_URL as string,
   });
 
+  let attempts = 0;
+
   instance.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -37,7 +45,13 @@ const makeApiCall = async <TRequest, TResponse>(
           })
         | null;
 
-      if (status === 401 && !!session?.tokenRefreshError) {
+      if (status === 401 && attempts < 1) {
+        attempts++;
+        reloadSession();
+        return instance.request(error.config);
+      }
+
+      if (status === 401 && attempts >= 1) {
         throw new RefreshTokenExpiredError();
       }
     }
@@ -67,4 +81,4 @@ const getActiveToken = async () => {
   return token.accessToken;
 };
 
-export { getReservations };
+export { getReservations, getCars };

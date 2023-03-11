@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,13 +33,13 @@ public class Car {
   private String model;
 
   @Column
-  private Date manufacturedAt;
+  private Instant manufacturedAt;
 
   @Column
-  private Date createdAt;
+  private Instant createdAt;
 
   @Column
-  private Date updatedAt;
+  private Instant updatedAt;
 
   @Column
   private UUID createdBy;

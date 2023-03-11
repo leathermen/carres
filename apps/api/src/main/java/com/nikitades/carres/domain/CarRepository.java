@@ -1,3 +1,8 @@
 package com.nikitades.carres.domain;
 
-public interface CarRepository {}
+import java.util.List;
+
+public interface CarRepository {
+
+  List<Car> findByAvailableIsTrue();
+}

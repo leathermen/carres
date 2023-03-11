@@ -6,5 +6,5 @@ import java.util.UUID;
 public interface ReservationRepository {
   List<Reservation> findAll();
 
-  List<Reservation> findByOwnerId(UUID ownerId);
+  List<Reservation> findByOwnerIdOrderByStartsAtDesc(UUID ownerId);
 }

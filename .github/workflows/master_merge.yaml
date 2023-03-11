@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - create-auth-service ##todo remove
 
 # env:
 
