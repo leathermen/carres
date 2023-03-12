@@ -1,6 +1,6 @@
 package com.nikitades.carres.infrastructure.spring.security;
 
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,9 +25,10 @@ public class WebSecurityConfig {
       .and()
       .authorizeHttpRequests(requests -> {
         requests
+          .requestMatchers(antMatcher("/h2-console/**"))
+          .permitAll()
           .requestMatchers("/actuator/**", "/open/**", "/api/*/open/**", "/v3/api-docs/**")
           .permitAll();
-        requests.requestMatchers(toH2Console()).permitAll();
         requests.anyRequest().authenticated();
       })
       .oauth2ResourceServer(oauth2 -> oauth2.jwt());

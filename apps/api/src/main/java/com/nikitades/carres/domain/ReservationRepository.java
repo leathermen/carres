@@ -7,4 +7,6 @@ public interface ReservationRepository {
   List<Reservation> findAll();
 
   List<Reservation> findByOwnerIdOrderByStartsAtDesc(UUID ownerId);
+
+  Reservation save(Reservation reservation);
 }
