@@ -34,15 +34,15 @@ dependencies {
 
   implementation("org.flywaydb:flyway-core:9.15.1")
 
-  annotationProcessor("org.projectlombok:lombok:1.18.26")
-  compileOnly("org.projectlombok:lombok:1.18.26")
+  annotationProcessor("org.projectlombok:lombok")
+  compileOnly("org.projectlombok:lombok")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.springframework.security:spring-security-test")
   testImplementation("org.instancio:instancio-junit:2.11.0")
 
-  testAnnotationProcessor("org.projectlombok:lombok:1.18.26")
-  testCompileOnly("org.projectlombok:lombok:1.18.26")
+  testAnnotationProcessor("org.projectlombok:lombok")
+  testCompileOnly("org.projectlombok:lombok")
 }
 
 tasks.withType<Test> { useJUnitPlatform() }

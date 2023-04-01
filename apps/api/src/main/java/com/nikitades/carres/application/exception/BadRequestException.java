@@ -1,8 +1,6 @@
 package com.nikitades.carres.application.exception;
 
-public class BadRequestException extends RuntimeException {
+import lombok.AllArgsConstructor;
 
-  public BadRequestException(String message) {
-    super(message);
-  }
-}
+@AllArgsConstructor
+public class BadRequestException extends RuntimeException {}

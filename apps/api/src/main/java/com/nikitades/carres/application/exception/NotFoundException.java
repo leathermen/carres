@@ -1,8 +1,6 @@
 package com.nikitades.carres.application.exception;
 
-public class NotFoundException extends RuntimeException {
+import lombok.AllArgsConstructor;
 
-  public NotFoundException(String message) {
-    super(message);
-  }
-}
+@AllArgsConstructor
+public class NotFoundException extends RuntimeException {}
