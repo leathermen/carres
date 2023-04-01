@@ -16,11 +16,11 @@ const getSharedSessionData = async (req: IncomingMessage) => {
     | null;
 
   const isManager = session?.roles?.includes("manager") || false;
-  const isAuthenticated = session?.tokenSet?.idToken || false;
+  const idToken = session?.tokenSet?.idToken || null;
 
   return {
     isManager,
-    isAuthenticated,
+    idToken,
   };
 };
 

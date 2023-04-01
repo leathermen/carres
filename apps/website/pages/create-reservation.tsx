@@ -13,10 +13,10 @@ import { getSessionData } from '../utils/session/getSharedSessionData';
 
 interface NewReservationScreenProps {
   isManager: boolean;
-  isAuthenticated: boolean;
+  idToken: string;
 }
 
-export default function NewReservationScreen({ isManager, isAuthenticated }: NewReservationScreenProps) {
+export default function NewReservationScreen({ isManager, idToken }: NewReservationScreenProps) {
 
   const { data: session, status } = useSession();
   const [cars, setCars] = useState([] as Car[]);
@@ -39,7 +39,7 @@ export default function NewReservationScreen({ isManager, isAuthenticated }: New
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
-        <Header isManager={isManager} isAuthenticated={isAuthenticated} activePage='create-reservation' />
+        <Header isManager={isManager} idToken={idToken} activePage='create-reservation' />
       </Container>
       <Container>
         <main>
@@ -56,10 +56,17 @@ export default function NewReservationScreen({ isManager, isAuthenticated }: New
           </div>
           <div className="mt-0">
             <div className="row">
-              <p className="col-12 leam mb-4 text-center">Available cars</p>
-              <div className='col-9 mx-auto'>
-                {cars.map(c => <CarListElement key={c.id} id={c.id} manufacturer={c.manufacturer} model={c.model} manufacturedAt={c.manufacturedAt} />)}
-              </div>
+              {idToken && (
+                <>
+                  <p className="col-12 leam mb-4 text-center">Available cars</p>
+                  <div className='col-9 mx-auto'>
+                    {cars.map(c => <CarListElement key={c.id} id={c.id} manufacturer={c.manufacturer} model={c.model} manufacturedAt={c.manufacturedAt} />)}
+                  </div>
+                </>
+              )}
+              {!idToken && (
+                <p className="col-12 leam mb-4 text-center">Please log in to see available cars</p>
+              )}
             </div>
           </div>
         </main>

@@ -1,14 +1,13 @@
-import { Session } from 'next-auth';
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import 'react';
 
 interface HeaderProps {
   activePage: string;
-  isAuthenticated: boolean;
+  idToken: string;
   isManager: boolean;
 }
 
-export default function Header({ activePage, isAuthenticated, isManager }: HeaderProps) {
+export default function Header({ activePage, idToken, isManager }: HeaderProps) {
   const handleSignin = () => {
     signIn('keycloak');
   };
@@ -26,10 +25,10 @@ export default function Header({ activePage, isAuthenticated, isManager }: Heade
         {isManager && (
           <li className="nav-item"><a href="#" className={`nav-link ${activePage === 'dashboard' ? 'active' : ''}`}>Dashboard</a></li>
         )}
-        {isAuthenticated && (
+        {idToken && (
           <li className="nav-item"><a href="#" onClick={() => handleSignout(idToken)} className="nav-link">Sign Out</a></li>
         )}
-        {!isManager && (
+        {!idToken && (
           <li className="nav-item"><a href="#" onClick={() => handleSignin()} className="nav-link">Sign In</a></li>
         )}
       </ul>

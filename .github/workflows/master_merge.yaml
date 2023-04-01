@@ -30,7 +30,7 @@ jobs:
           path: /home/runner/.gradle
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      - run: ./gradlew test -PactiveProfiles=test jacocoTestReport sonar --info
+      - run: ./gradlew test -PactiveProfiles=test jacocoTestReport sonar
         env:
           GITHUB_TOKEN: ${{ github.token }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

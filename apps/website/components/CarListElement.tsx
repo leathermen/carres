@@ -15,7 +15,7 @@ export default function CarListElement({ id, manufacturer, model, manufacturedAt
     <div className="ms-2 me-auto w-100">
       <div className='row'>
         <div className="col-3 col-lg-2">
-          <a href={`/create-reservation/${id}`} className="btn btn-light btn-success:hover">Order</a>
+          <a href={`/create-reservation/${id}`} className="btn btn-info btn-success:hover">Order</a>
         </div>
         <div className="col-9 col-lg-10">
           <span className="fw-bold">{manufacturer}</span> <span>{model}</span>

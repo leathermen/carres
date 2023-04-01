@@ -2,7 +2,7 @@ plugins {
   java
   id("org.springframework.boot") version "3.0.2"
   id("io.spring.dependency-management") version "1.1.0"
-  id("io.freefair.lombok") version "6.6.1"
+  id("io.freefair.lombok") version "8.0.1"
 
   id("org.sonarqube") version "3.5.0.2730"
   jacoco
@@ -34,9 +34,15 @@ dependencies {
 
   implementation("org.flywaydb:flyway-core:9.15.1")
 
+  annotationProcessor("org.projectlombok:lombok:1.18.26")
+  compileOnly("org.projectlombok:lombok:1.18.26")
+
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.springframework.security:spring-security-test")
   testImplementation("org.instancio:instancio-junit:2.11.0")
+
+  testAnnotationProcessor("org.projectlombok:lombok:1.18.26")
+  testCompileOnly("org.projectlombok:lombok:1.18.26")
 }
 
 tasks.withType<Test> { useJUnitPlatform() }

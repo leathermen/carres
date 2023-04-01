@@ -17,10 +17,10 @@ const RESERVATION_COOKIE_NAME = "i_need_reservations";
 interface HomeProps {
   needsReservationsServerSide: boolean;
   isManager: boolean;
-  isAuthenticated: boolean;
+  idToken: string;
 }
 
-export default function Home({ needsReservationsServerSide, isAuthenticated, isManager }: HomeProps) {
+export default function Home({ needsReservationsServerSide, idToken, isManager }: HomeProps) {
 
   const { data: session, status } = useSession();
   const [needsReservations, setNeedsReservations] = useState(needsReservationsServerSide);
@@ -50,7 +50,7 @@ export default function Home({ needsReservationsServerSide, isAuthenticated, isM
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
-        <Header isAuthenticated={isAuthenticated} isManager={isManager} activePage='home' />
+        <Header idToken={idToken} isManager={isManager} activePage='home' />
       </Container>
       <Container>
         <main>
