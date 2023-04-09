@@ -99,7 +99,7 @@ public class Reservation {
     this.ownerId = ownerId;
     this.car = car;
     this.startsAt = startsAt;
-    this.endsAt = Instant.ofEpochSecond(startsAt.getEpochSecond() + (durationMinutes * 60000));
+    this.endsAt = Instant.ofEpochSecond(startsAt.getEpochSecond() + (durationMinutes * 60));
     this.createdAt = createdAt;
     this.cancelled = false;
   }
@@ -118,7 +118,7 @@ public class Reservation {
 
     if (
       newReservation.getStartsAt().isAfter(existingReservationStartWithTimePadding) &&
-      newReservation.getEndsAt().isBefore(existingReservationEndWithTimePadding)
+      newReservation.getStartsAt().isBefore(existingReservationEndWithTimePadding)
     ) {
       return true;
     }

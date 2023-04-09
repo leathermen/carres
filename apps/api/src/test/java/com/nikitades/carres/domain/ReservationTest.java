@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.nikitades.carres.domain.exception.BadReservationDurationException;
 import com.nikitades.carres.domain.exception.CannotReserveVehicleForTooSoonException;
+import com.nikitades.carres.domain.exception.ReservationOverlapsWithAnotherOneException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
@@ -65,25 +67,27 @@ class ReservationTest {
   }
 
   @Test
-  void whenReservationOverlapsWithAnotherOne_thenExceptionIsThrown() {
+  void whenReservationExactlyOverlapsWithAnotherOne_thenExceptionIsThrown() {
     //Given that the time is current day at the noon
-    LocalDateTime now = LocalDateTime.now();
     Instant concurrentReservationTime = LocalDateTime
-      .of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 12, 0, 0)
+      .now()
+      .plus(Duration.ofDays(1))
+      .withHour(12)
       .toInstant(ZoneOffset.UTC);
 
     //And that there is the reservation for that
     Reservation dummyReservation = Instancio
       .of(Reservation.class)
       .set(field(Reservation::getStartsAt), concurrentReservationTime)
+      .set(field(Reservation::getEndsAt), concurrentReservationTime.plus(Duration.ofMinutes(30)))
       .create();
 
     //and some arbitrary car is used
     Car car = Instancio.of(Car.class).create();
 
-    //so when a new reservation is created for exactly that tine, an exception is thrown
+    //so when a new reservation is created for exactly that time, an exception is thrown
     assertThrows(
-      CannotReserveVehicleForTooSoonException.class,
+      ReservationOverlapsWithAnotherOneException.class,
       () ->
         Reservation.createWithNoOverlapping(
           List.of(dummyReservation),
@@ -92,6 +96,107 @@ class ReservationTest {
           car,
           concurrentReservationTime,
           30,
+          Instant.now()
+        )
+    );
+  }
+
+  @Test
+  void whenReservationStartTimeOverlapsWithAnotherReservationSpan_thenExceptionIsThrown() {
+    //Given that there is a reservation that lasts for 45 minutes from 14:00 till 14:45
+    Instant concurrentReservationStartTime = LocalDateTime
+      .now()
+      .plus(Duration.ofDays(1))
+      .withHour(14)
+      .withMinute(0)
+      .toInstant(ZoneOffset.UTC);
+
+    Instant concurrentReservationEndTime = LocalDateTime
+      .now()
+      .plus(Duration.ofDays(1))
+      .withHour(14)
+      .withMinute(45)
+      .toInstant(ZoneOffset.UTC);
+
+    //And that there is the reservation for that
+    Reservation dummyReservation = Instancio
+      .of(Reservation.class)
+      .set(field(Reservation::getStartsAt), concurrentReservationStartTime)
+      .set(field(Reservation::getEndsAt), concurrentReservationEndTime)
+      .create();
+
+    //and some arbitrary car is used
+    Car car = Instancio.of(Car.class).create();
+
+    //so when a new reservation is created for exactly a span that starts within the used time, there's an exception
+
+    Instant newReservationStartTime = LocalDateTime
+      .now()
+      .plus(Duration.ofDays(1))
+      .withHour(14)
+      .withMinute(30)
+      .toInstant(ZoneOffset.UTC);
+
+    assertThrows(
+      ReservationOverlapsWithAnotherOneException.class,
+      () ->
+        Reservation.createWithNoOverlapping(
+          List.of(dummyReservation),
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          car,
+          newReservationStartTime,
+          30,
+          Instant.now()
+        )
+    );
+  }
+
+  @Test
+  void whenReservationEndTimeOverlapsWithAnotherReservationSpan_thenExceptionIsThrown() {
+    //Given that there is a reservation that lasts for 45 minutes from 14:00 till 14:45
+    Instant concurrentReservationStartTime = LocalDateTime
+      .now()
+      .plus(Duration.ofDays(1))
+      .withHour(14)
+      .withMinute(0)
+      .toInstant(ZoneOffset.UTC);
+
+    Instant concurrentReservationEndTime = LocalDateTime
+      .now()
+      .plus(Duration.ofDays(1))
+      .withHour(14)
+      .withMinute(45)
+      .toInstant(ZoneOffset.UTC);
+
+    //And that there is the reservation for that
+    Reservation dummyReservation = Instancio
+      .of(Reservation.class)
+      .set(field(Reservation::getStartsAt), concurrentReservationStartTime)
+      .set(field(Reservation::getEndsAt), concurrentReservationEndTime)
+      .create();
+
+    //and some arbitrary car is used
+    Car car = Instancio.of(Car.class).create();
+
+    //so when a new reservation is created for exactly a span that ends within the used time, there's an exception
+    Instant newReservationStartTime = LocalDateTime
+      .now()
+      .plus(Duration.ofDays(1))
+      .withHour(13)
+      .withMinute(45)
+      .toInstant(ZoneOffset.UTC);
+
+    assertThrows(
+      ReservationOverlapsWithAnotherOneException.class,
+      () ->
+        Reservation.createWithNoOverlapping(
+          List.of(dummyReservation),
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          car,
+          newReservationStartTime,
+          45,
           Instant.now()
         )
     );
