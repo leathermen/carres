@@ -114,6 +114,7 @@ class ReservationTest {
     Reservation dummyReservation = Instancio
       .of(Reservation.class)
       .set(field(Reservation::getStartsAt), time1)
+      .set(field(Reservation::getEndsAt), time1.plus(Duration.ofMinutes(15)))
       .create();
 
     //and some arbitrary car is used
