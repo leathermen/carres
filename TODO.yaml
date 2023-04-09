@@ -24,10 +24,10 @@ base:
     todo:
       - create my reservations screen
         + the outlook is done
-        - cover with tests
+        + cover with tests
       - create "make new reservation" screen
         + the outlook is done
-        - cover with tests
+        + cover with tests
       - create single new reservation screen
         - create the outlook
         - create the api response with the occupied hours

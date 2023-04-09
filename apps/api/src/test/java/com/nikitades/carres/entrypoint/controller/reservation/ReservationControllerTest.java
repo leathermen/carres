@@ -1,25 +1,33 @@
 package com.nikitades.carres.entrypoint.controller.reservation;
 
 import static org.instancio.Select.field;
+import static org.mockito.Answers.valueOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nikitades.carres.domain.Car;
 import com.nikitades.carres.domain.CarRepository;
 import com.nikitades.carres.domain.Reservation;
 import com.nikitades.carres.domain.ReservationRepository;
+import com.nikitades.carres.entrypoint.controller.reservation.dto.CreateReservationRequest;
 import com.nikitades.carres.entrypoint.mock.security.MockJwt;
 import com.nikitades.carres.entrypoint.mock.security.Users;
 import com.nikitades.carres.entrypoint.mock.security.WithMockJwt;
 import jakarta.transaction.Transactional;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import org.instancio.Instancio;
 import org.instancio.Model;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,6 +41,9 @@ class ReservationControllerTest {
 
   @Autowired
   private CarRepository carRepository;
+
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @Test
   @Transactional
@@ -63,7 +74,47 @@ class ReservationControllerTest {
     //then the list is there, and of a proper items count
     actual
       .andExpect(status().isOk())
-      .andExpect(MockMvcResultMatchers.jsonPath("$.items").exists())
-      .andExpect(MockMvcResultMatchers.jsonPath("$.items.length()").value(3));
+      .andExpect(jsonPath("$.items").exists())
+      .andExpect(jsonPath("$.items.length()").value(3));
+  }
+
+  @Test
+  @WithMockJwt(MockJwt.Nikita)
+  @Transactional
+  void whenNewReservationRequestIsPosted_reservationIsCreated() throws Exception {
+    //Given some car exists in the database
+    Model<Car> carModel = Instancio
+      .of(Car.class)
+      .set(field(Car::getCreatedBy), Users.Nikita.getId())
+      .toModel();
+    Car car = carRepository.save(Instancio.of(carModel).create());
+
+    //when someone authorized posts the new reservation request
+    String body = objectMapper.writeValueAsString(
+      new CreateReservationRequest(
+        LocalDateTime
+          .now()
+          .plus(Duration.ofDays(1))
+          .withHour(15)
+          .withMinute(30)
+          .toInstant(ZoneOffset.UTC),
+        30,
+        car.getId()
+      )
+    );
+    var actual = mvc.perform(
+      MockMvcRequestBuilders
+        .post("/api/v1/reservations")
+        .content(body)
+        .contentType(MediaType.APPLICATION_JSON)
+    );
+
+    //then no http errors happen
+    actual
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.id").isString())
+      .andExpect(jsonPath("$.startsAt").isString())
+      .andExpect(jsonPath("$.endsAt").isString())
+      .andExpect(jsonPath("$.vehicleDescription").isString());
   }
 }

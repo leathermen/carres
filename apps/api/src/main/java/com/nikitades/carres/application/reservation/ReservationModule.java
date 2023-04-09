@@ -2,6 +2,7 @@ package com.nikitades.carres.application.reservation;
 
 import com.nikitades.carres.application.UuidProvider;
 import com.nikitades.carres.application.exception.BadRequestException;
+import com.nikitades.carres.application.exception.NotFoundException;
 import com.nikitades.carres.domain.Car;
 import com.nikitades.carres.domain.CarRepository;
 import com.nikitades.carres.domain.Reservation;
@@ -15,7 +16,6 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.webjars.NotFoundException;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class ReservationModule {
     Optional<Car> car = carRepository.findById(vehicleId);
 
     if (!car.isPresent()) {
-      throw new NotFoundException("Car is not found");
+      throw new NotFoundException("Car is not found", "NO_CAR_FOUND");
     }
 
     List<Reservation> possiblyOverlappingReservations = reservationRepository.findByCarId(

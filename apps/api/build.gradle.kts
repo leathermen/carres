@@ -28,6 +28,7 @@ dependencies {
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
   implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0-rc2")
 
   runtimeOnly("org.postgresql:postgresql")
   runtimeOnly("com.h2database:h2")

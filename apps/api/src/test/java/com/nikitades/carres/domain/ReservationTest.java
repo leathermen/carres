@@ -6,12 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.nikitades.carres.domain.exception.BadReservationDurationException;
-import com.nikitades.carres.domain.exception.CannotReserveVehicleForTooSoonException;
 import com.nikitades.carres.domain.exception.ReservationOverlapsWithAnotherOneException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
