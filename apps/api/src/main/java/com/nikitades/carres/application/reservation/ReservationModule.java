@@ -4,9 +4,11 @@ import com.nikitades.carres.application.UuidProvider;
 import com.nikitades.carres.application.exception.BadRequestException;
 import com.nikitades.carres.domain.Car;
 import com.nikitades.carres.domain.CarRepository;
-import com.nikitades.carres.domain.Exception.BadReservationDurationException;
 import com.nikitades.carres.domain.Reservation;
 import com.nikitades.carres.domain.ReservationRepository;
+import com.nikitades.carres.domain.exception.BadReservationDurationException;
+import com.nikitades.carres.domain.exception.CannotReserveVehicleForTooSoonException;
+import com.nikitades.carres.domain.exception.ReservationOverlapsWithAnotherOneException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -39,11 +41,16 @@ public class ReservationModule {
       throw new NotFoundException("Car is not found");
     }
 
+    List<Reservation> possiblyOverlappingReservations = reservationRepository.findByCarId(
+      vehicleId
+    );
+
     Reservation reservation;
 
     try {
       reservation =
-        new Reservation(
+        Reservation.createWithNoOverlapping(
+          possiblyOverlappingReservations,
           uuidProvider.provide(),
           userId,
           car.get(),
@@ -52,7 +59,11 @@ public class ReservationModule {
           startTime
         );
     } catch (BadReservationDurationException e) {
-      throw new BadRequestException(e.getMessage());
+      throw new BadRequestException(e.getMessage(), "BAD_RESERVATION_DURATION");
+    } catch (ReservationOverlapsWithAnotherOneException e) {
+      throw new BadRequestException(e.getMessage(), "RESERVATION_OVERLAPS_WITH_EXISTING_ONE");
+    } catch (CannotReserveVehicleForTooSoonException e) {
+      throw new BadRequestException(e.getMessage(), "CANNOT_RESERVE_FOR_TOO_SOON");
     }
 
     reservationRepository.save(reservation);

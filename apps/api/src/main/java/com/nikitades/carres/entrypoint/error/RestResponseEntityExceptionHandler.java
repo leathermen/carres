@@ -1,5 +1,6 @@
 package com.nikitades.carres.entrypoint.error;
 
+import com.nikitades.carres.application.exception.AnnotatedException;
 import com.nikitades.carres.application.exception.BadRequestException;
 import com.nikitades.carres.application.exception.ForbiddenException;
 import com.nikitades.carres.application.exception.NotFoundException;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-  private Map<Class<? extends RuntimeException>, HttpStatus> statuses = Map.of(
+  private Map<Class<? extends AnnotatedException>, HttpStatus> statuses = Map.of(
     BadRequestException.class,
     HttpStatus.BAD_REQUEST,
     ForbiddenException.class,
@@ -23,8 +24,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     HttpStatus.NOT_FOUND
   );
 
-  @ExceptionHandler(value = { RuntimeException.class })
-  protected ResponseEntity<ApiError> handle(RuntimeException e, WebRequest request) {
-    return new ResponseEntity<>(new ApiError(e.getMessage()), statuses.get(e.getClass()));
+  @ExceptionHandler(value = { AnnotatedException.class })
+  protected ResponseEntity<ApiError> handle(AnnotatedException e, WebRequest request) {
+    return new ResponseEntity<>(
+      new ApiError(e.getMessage(), e.getCode()),
+      statuses.get(e.getClass())
+    );
   }
 }

@@ -8,6 +8,7 @@ import ReservationsListResponse from "./types/ReservationsListResponse";
 import Car from "./types/Car";
 import CreateReservationRequest from "./types/CreateReservationRequest";
 import Reservation from "./types/Reservation";
+import { ApiError } from "./ApiError";
 
 let token: Token | null = null;
 
@@ -53,6 +54,13 @@ const makeApiCall = async <TRequest, TResponse>(
     (response) => response,
     async (error) => {
       const status = error.response ? error.response.status : null;
+
+      const code = error.response?.data?.code;
+      const message = error.response?.data?.message;
+
+      if (!!code && !!message) {
+        throw new ApiError(message, code);
+      }
 
       const session = (await getSession()) as
         | (Session & {

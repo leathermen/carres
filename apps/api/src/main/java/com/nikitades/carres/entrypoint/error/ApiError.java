@@ -8,4 +8,5 @@ import lombok.Getter;
 public class ApiError {
 
   private String message;
+  private String code;
 }

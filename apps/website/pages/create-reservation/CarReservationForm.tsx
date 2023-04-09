@@ -2,13 +2,16 @@ import { FormEvent, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { ApiError } from '../../utils/client/ApiError';
+import { createReservation } from '../../utils/client/apiClient';
 
 
 interface CarReservationFormProps {
-  onSubmit: (startTime: Date, durationMinutes: number) => Promise<void>;
+  vehicleId: string;
+  onSuccess: () => void;
 }
 
-export default function CarReservationForm({ onSubmit }: CarReservationFormProps) {
+export default function CarReservationForm({ vehicleId, onSuccess }: CarReservationFormProps) {
   const [startDate, setStartDate] = useState<Date>(getStartOfTomorrow());
   const [durationMinutes, setDurationMinutes] = useState<number>(15);
 
@@ -20,13 +23,38 @@ export default function CarReservationForm({ onSubmit }: CarReservationFormProps
   const durations = [15, 30, 45, 60];
 
 
-  const onSubmitInner = (event: FormEvent<HTMLFormElement>) => {
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmit(startDate, durationMinutes).then(() => setSubmitted(true)).catch(() => setSubmitError("Something went wrong!"));
+    createReservation({
+      startsAt: startDate.toISOString(),
+      durationMinutes,
+      vehicleId
+    })
+      .then(() => {
+        setSubmitted(true);
+        onSuccess();
+      })
+      .catch((e: ApiError) => {
+        console.info(e.code);
+        switch (e.code) {
+          case "BAD_RESERVATION_DURATION":
+            setSubmitError("Wrong reservation duration given!");
+            break;
+          case "RESERVATION_OVERLAPS_WITH_EXISTING_ONE":
+            setSubmitError("Your reservation overlaps with another one. Please choose another time.");
+            break;
+          case "CANNOT_RESERVE_FOR_TOO_SOON":
+            setSubmitError("The entered reservation time is too soon. Please choose another time.");
+            break;
+          default:
+            setSubmitError("Something went wrong!");
+        }
+      });
   }
 
   return (
-    <Form onSubmit={(event: FormEvent<HTMLFormElement>) => onSubmitInner(event)}>
+    <Form onSubmit={(event: FormEvent<HTMLFormElement>) => onSubmit(event)}>
       {submitted && (<>
         <div className="alert alert-success" role="alert">
           Successfully submitted
@@ -36,7 +64,8 @@ export default function CarReservationForm({ onSubmit }: CarReservationFormProps
       </>)}
       {!!submitError && (<>
         <div className="alert alert-danger" role="alert">
-          Something went wrong, see console
+          {submitError}
+          <button type="button" className="btn btn-light mt-3" onClick={(e: FormEvent<HTMLButtonElement>) => setSubmitError(null)}>Try again</button>
         </div>
       </>)}
       {!submitted && !submitError && (

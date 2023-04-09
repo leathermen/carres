@@ -26,6 +26,7 @@ spring:
     defer-datasource-initialization: false
     hibernate:
       ddl-auto: none
+    show-sql: true
     properties:
       jakarta:
         persistence:

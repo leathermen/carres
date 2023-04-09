@@ -1,10 +1,10 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { NextRouter, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Header from '../../components/Header';
-import { createReservation as apiCreateReservation, getCar } from '../../utils/client/apiClient';
+import { getCar } from '../../utils/client/apiClient';
 import Car from '../../utils/client/types/Car';
 import { SharedSessionData, getSessionData } from '../../utils/session/getSharedSessionData';
 import CarReservationForm from './CarReservationForm';
@@ -58,7 +58,7 @@ export default function CarReservationPage({ idToken, isManager, needsReservatio
             <div className="px-4 py-5 my-5">
               <div className="col-lg-6 mx-auto">
                 <p className="leam mb-4 text-center">Enter the reservation details</p>
-                <CarReservationForm onSubmit={(startTime: Date, durationMinutes: number) => createReservation(router, startTime, durationMinutes, car.id)} />
+                <CarReservationForm vehicleId={car.id} onSuccess={() => setTimeout(() => router.push("/"), 1500)} />
               </div>
             </div>
           )}
@@ -71,19 +71,6 @@ export default function CarReservationPage({ idToken, isManager, needsReservatio
 const getYearFromDateString = (dateString: string): string => {
   const date = new Date(dateString);
   return date.getUTCFullYear().toString();
-}
-
-const createReservation = (router: NextRouter, startTime: Date, durationMinutes: number, vehicleId: string): Promise<void> => {
-  const createReservationPromise = apiCreateReservation({
-    startsAt: startTime.toISOString(),
-    durationMinutes,
-    vehicleId
-  });
-  createReservationPromise
-    .then(() => setTimeout(() => router.push("/create-reservation"), 1500))
-    .catch((e: Error) => console.error(e.message));
-
-  return createReservationPromise as unknown as Promise<void>;
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req, params }) => {

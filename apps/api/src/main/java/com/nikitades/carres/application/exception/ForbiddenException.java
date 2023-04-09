@@ -1,11 +1,8 @@
 package com.nikitades.carres.application.exception;
 
-import lombok.AllArgsConstructor;
+public class ForbiddenException extends AnnotatedException {
 
-@AllArgsConstructor
-public class ForbiddenException extends RuntimeException {
-
-  public ForbiddenException(String message) {
-    super(message);
+  public ForbiddenException(String message, String code) {
+    super(message, code);
   }
 }
