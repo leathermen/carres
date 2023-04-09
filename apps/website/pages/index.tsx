@@ -1,7 +1,6 @@
-import { hasCookie, setCookie } from 'cookies-next';
+import { setCookie } from 'cookies-next';
 import type { GetServerSideProps } from 'next';
-import { Session } from 'next-auth';
-import { getSession, signIn, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
@@ -10,19 +9,15 @@ import ReservationListElement from '../components/ReservationListElement';
 import { getReservations } from '../utils/client';
 import { RefreshTokenExpiredError } from '../utils/client/types/RefreshTokenExpiredError';
 import Reservation from '../utils/client/types/Reservation';
-import { getSessionData } from '../utils/session/getSharedSessionData';
+import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
 
 const RESERVATION_COOKIE_NAME = "i_need_reservations";
 
-interface HomeProps {
-  needsReservationsServerSide: boolean;
-  isManager: boolean;
-  idToken: string;
-}
+interface HomeProps extends SharedSessionData { }
 
-export default function Home({ needsReservationsServerSide, idToken, isManager }: HomeProps) {
+export default function Home({ needsReservations: needsReservationsServerSide, idToken, isManager }: HomeProps) {
 
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [needsReservations, setNeedsReservations] = useState(needsReservationsServerSide);
 
   const iNeedReservation = (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -50,13 +45,13 @@ export default function Home({ needsReservationsServerSide, idToken, isManager }
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
-        <Header idToken={idToken} isManager={isManager} activePage='home' />
+        <Header idToken={idToken} isManager={isManager} activePage='home' needsReservation={needsReservations} />
       </Container>
       <Container>
         <main>
           {!needsReservations && (
             <div className="px-4 py-5 my-5 text-center">
-              <img className="d-block mx-auto mb-4" src="/png-transparent-girl-car-dog-driving-anime-japanese-suitcase-travel-thumbnail.png" alt="Why don't you reserve some cars onii-chan" />
+              <img className="d-block mx-auto mb-4" src="/images/png-transparent-girl-car-dog-driving-anime-japanese-suitcase-travel-thumbnail.png" alt="Why don't you reserve some cars onii-chan" />
               <h1 className="display-5 fw-bold">You need a car</h1>
               <div className="col-lg-6 mx-auto">
                 <p className="lead mb-4">Women unconsciously love men with cars. <br /> Red cars are good. Big cars are better. Big red ones...</p>
@@ -78,7 +73,7 @@ export default function Home({ needsReservationsServerSide, idToken, isManager }
           {needsReservations && status === 'authenticated' && (
             <div className="px-4 py-5 my-5">
               <div className="col-lg-9 mx-auto">
-                <p className="leam mb-4 text-center">Reservations</p>
+                <p className="leam mb-4 text-center">Your reservations</p>
                 <ul>
                   {reservations.map(r => <ReservationListElement key={r.id} startsAt={r.startsAt} endsAt={r.endsAt} vehicleDescription={r.vehicleDescription} />)}
                 </ul>
@@ -92,10 +87,9 @@ export default function Home({ needsReservationsServerSide, idToken, isManager }
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
-  const needsReservationsServerSide = hasCookie(RESERVATION_COOKIE_NAME, { req, res })
   const sharedSessionData = await getSessionData(req);
 
   return {
-    props: { needsReservationsServerSide, ...sharedSessionData }
+    props: { ...sharedSessionData }
   };
 };

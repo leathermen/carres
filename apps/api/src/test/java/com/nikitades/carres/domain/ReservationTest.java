@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.nikitades.carres.domain.Exception.BadReservationDurationException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
@@ -21,7 +22,7 @@ class ReservationTest {
 
     //when a new reservation is created, an exception is thrown
     assertThrows(
-      IllegalArgumentException.class,
+      BadReservationDurationException.class,
       () ->
         new Reservation(
           UUID.randomUUID(),

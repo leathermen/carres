@@ -4,16 +4,31 @@ import { getSession } from "next-auth/react";
 import { Token } from "../session/Token";
 import CarsResponse from "./types/CarsResponse";
 import { RefreshTokenExpiredError } from "./types/RefreshTokenExpiredError";
-import ReservationResponse from "./types/ReservationResponse";
+import ReservationsListResponse from "./types/ReservationsListResponse";
+import Car from "./types/Car";
+import CreateReservationRequest from "./types/CreateReservationRequest";
+import Reservation from "./types/Reservation";
 
 let token: Token | null = null;
 
 const getReservations = async () => {
-  return await makeApiCall<null, ReservationResponse>("get", "/api/v1/reservations");
+  return await makeApiCall<null, ReservationsListResponse>("get", "/api/v1/reservations");
+};
+
+const createReservation = async (request: CreateReservationRequest) => {
+  return await makeApiCall<CreateReservationRequest, Reservation>(
+    "post",
+    "/api/v1/reservations",
+    request
+  );
 };
 
 const getCars = async () => {
   return await makeApiCall<null, CarsResponse>("get", "/api/v1/cars/available");
+};
+
+const getCar = async (carId: string) => {
+  return await makeApiCall<null, Car>("get", `/api/v1/cars/${carId}`);
 };
 
 const reloadSession = () => {
@@ -81,4 +96,4 @@ const getActiveToken = async () => {
   return token.accessToken;
 };
 
-export { getReservations, getCars };
+export { getReservations, getCars, getCar, createReservation };

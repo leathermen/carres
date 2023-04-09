@@ -60,6 +60,8 @@ sonarqube {
   properties {
     property("sonar.projectKey", "leathermen_carres_api")
     property("sonar.organization", "leathermen")
+    property("sonar.exclusions", "**/main/resources/db/**")
+    property("sonar.coverage.exclusions", "**/*Config.java")
     property("sonar.sources", "src/main/")
     property("sonar.tests", "src/test/")
     property("sonar.java.source", "19")

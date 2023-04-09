@@ -9,18 +9,14 @@ import Header from '../components/Header';
 import { getCars } from '../utils/client/apiClient';
 import Car from '../utils/client/types/Car';
 import { RefreshTokenExpiredError } from '../utils/client/types/RefreshTokenExpiredError';
-import { getSessionData } from '../utils/session/getSharedSessionData';
+import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
 
-interface NewReservationScreenProps {
-  isManager: boolean;
-  idToken: string;
-}
+interface NewReservationScreenProps extends SharedSessionData { }
 
-export default function NewReservationScreen({ isManager, idToken }: NewReservationScreenProps) {
+export default function NewReservationScreen({ isManager, idToken, needsReservations }: NewReservationScreenProps) {
 
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [cars, setCars] = useState([] as Car[]);
-
 
   useEffect(() => {
     if (status !== 'authenticated') return;
@@ -39,13 +35,13 @@ export default function NewReservationScreen({ isManager, idToken }: NewReservat
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
-        <Header isManager={isManager} idToken={idToken} activePage='create-reservation' />
+        <Header isManager={isManager} idToken={idToken} activePage='create-reservation' needsReservation={needsReservations} />
       </Container>
       <Container>
         <main>
           <div className="px-4 py-1 my-1 text-center">
             <div className="row">
-              <img className="col-6 col-xl-4 d-block mx-auto mb-4 img-fluid" src="/pngtree-car-seller-deals-buying-and-sale-flat-illustration-png-image_5426832.jpg" alt="Just look how important you are when you have a car" />
+              <img className="col-6 col-xl-4 d-block mx-auto mb-4 img-fluid" src="/images/pngtree-car-seller-deals-buying-and-sale-flat-illustration-png-image_5426832.jpg" alt="Just look how important you are when you have a car" />
               <div className="col-6 col-xl-8 align-middle align-items-center row">
                 <div className="mx-auto row">
                   <h1 className="display-5 fw-bold col-12">Just one step away</h1>

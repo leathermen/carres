@@ -1,5 +1,5 @@
 import Reservation from "./Reservation";
 
-export default interface ReservationResponse {
+export default interface ReservationsListResponse {
   items: Reservation[];
 }

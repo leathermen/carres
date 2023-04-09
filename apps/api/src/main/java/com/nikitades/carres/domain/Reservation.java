@@ -1,5 +1,6 @@
 package com.nikitades.carres.domain;
 
+import com.nikitades.carres.domain.Exception.BadReservationDurationException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -46,9 +47,9 @@ public class Reservation {
     Instant startsAt,
     int durationMinutes,
     Instant createdAt
-  ) {
+  ) throws BadReservationDurationException {
     if (durationMinutes < 15) {
-      throw new IllegalArgumentException("Minimal reservation duration is 15 minutes.");
+      throw new BadReservationDurationException("Minimal reservation duration is 15 minutes.");
     }
     this.id = id;
     this.ownerId = ownerId;

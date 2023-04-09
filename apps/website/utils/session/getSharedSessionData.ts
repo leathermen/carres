@@ -1,8 +1,11 @@
+import { hasCookie } from "cookies-next";
 import { IncomingMessage } from "http";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 
-const getSharedSessionData = async (req: IncomingMessage) => {
+const RESERVATION_COOKIE_NAME = "i_need_reservations";
+
+const getSharedSessionData = async (req: IncomingMessage): Promise<SharedSessionData> => {
   const session = (await getSession({ req })) as
     | (Session & {
         tokenSet?: {
@@ -17,11 +20,19 @@ const getSharedSessionData = async (req: IncomingMessage) => {
 
   const isManager = session?.roles?.includes("manager") || false;
   const idToken = session?.tokenSet?.idToken || null;
+  const needsReservations = hasCookie(RESERVATION_COOKIE_NAME, { req });
 
   return {
     isManager,
     idToken,
+    needsReservations,
   };
 };
 
-export { getSharedSessionData as getSessionData };
+interface SharedSessionData {
+  needsReservations: boolean;
+  isManager: boolean;
+  idToken: string | null;
+}
+
+export { getSharedSessionData as getSessionData, type SharedSessionData };
