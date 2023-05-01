@@ -1,14 +1,16 @@
 import axios from "axios";
 import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { Token } from "../session/Token";
 import CarsResponse from "./types/CarsResponse";
-import { RefreshTokenExpiredError } from "./types/RefreshTokenExpiredError";
 import ReservationsListResponse from "./types/ReservationsListResponse";
 import Car from "./types/Car";
 import CreateReservationRequest from "./types/CreateReservationRequest";
 import Reservation from "./types/Reservation";
-import { ApiError } from "./ApiError";
+import { ApiError } from "./errors/ApiError";
+import AdminReservationsListResponse from "./types/AdminReservationsListResponse";
+import User from "./types/User";
+import { NotFoundError } from "./errors/NotFoundError";
 
 let token: Token | null = null;
 
@@ -31,6 +33,24 @@ const getCars = async () => {
 const getCar = async (carId: string) => {
   return await makeApiCall<null, Car>("get", `/api/v1/cars/${carId}`);
 };
+
+const getUserIdByEmail = async (email: string) => {
+  return await makeApiCall<null, User>("get", `/api/v1/dashboard/user?email=${email}`);
+};
+
+const getUsersReservations = async (id: string, page: number = 0) => {
+  return await makeApiCall<null, AdminReservationsListResponse>(
+    "get",
+    `/api/v1/dashboard/user-reservations?userId=${id}&page=${page}`
+  );
+};
+
+const cancelReservation = async (id: string) => {
+  return await makeApiCall<null, null>(
+    "delete",
+    `/api/v1/dashboard/user-reservations/${id}`
+  )
+}
 
 const reloadSession = () => {
   const event = new Event("visibilitychange");
@@ -59,7 +79,12 @@ const makeApiCall = async <TRequest, TResponse>(
       const message = error.response?.data?.message;
 
       if (!!code && !!message) {
-        throw new ApiError(message, code);
+        switch (status) {
+          case 404:
+            throw new NotFoundError(message, code);
+          default:
+            throw new ApiError(message, code);
+        }
       }
 
       const session = (await getSession()) as
@@ -75,7 +100,7 @@ const makeApiCall = async <TRequest, TResponse>(
       }
 
       if (status === 401 && attempts >= 1) {
-        throw new RefreshTokenExpiredError();
+        signIn("keycloak");
       }
     }
   );
@@ -104,4 +129,12 @@ const getActiveToken = async () => {
   return token.accessToken;
 };
 
-export { getReservations, getCars, getCar, createReservation };
+export {
+  getReservations,
+  getCars,
+  getCar,
+  createReservation,
+  cancelReservation,
+  getUserIdByEmail,
+  getUsersReservations,
+};

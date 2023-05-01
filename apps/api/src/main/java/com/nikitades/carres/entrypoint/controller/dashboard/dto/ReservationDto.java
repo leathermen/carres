@@ -1,4 +1,4 @@
-package com.nikitades.carres.entrypoint.controller.reservation.dto;
+package com.nikitades.carres.entrypoint.controller.dashboard.dto;
 
 import com.nikitades.carres.domain.Reservation;
 import java.time.Instant;
@@ -11,20 +11,20 @@ public class ReservationDto {
   private final UUID id;
   private final Instant startsAt;
   private final Instant endsAt;
-  private final String vehicleDescription;
   private final boolean isCancelled;
+  private final String vehicleDescription;
 
   public static ReservationDto fromReservation(Reservation reservation) {
     return new ReservationDto(
       reservation.getId(),
       reservation.getStartsAt(),
       reservation.getEndsAt(),
+      reservation.isCancelled(),
       String.format(
         "%s %s",
         reservation.getCar().getManufacturer(),
         reservation.getCar().getModel()
-      ),
-      reservation.isCancelled()
+      )
     );
   }
 }

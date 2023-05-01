@@ -19,7 +19,7 @@ export default function CarReservationPage({ idToken, isManager, needsReservatio
     if (car == null) {
       getCar(router.query["carId"] as string).then(car => setCar(car)).catch(err => setCar(false));
     }
-  }, [car])
+  }, [car]);
 
   return <>
     <Head>

@@ -52,9 +52,9 @@ public class MockJwtSecurityContextFactory implements WithSecurityContextFactory
 
     val authorities = AuthorityUtils.createAuthorityList(
       user
-        .getScope()
+        .getRoles()
         .stream()
-        .map(scope -> String.format("SCOPE_%s", scope))
+        .map(role -> role.toString().toLowerCase())
         .toList()
         .toArray(new String[0])
     );

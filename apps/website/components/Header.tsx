@@ -28,7 +28,7 @@ export default function Header({ activePage, idToken, isManager, needsReservatio
           <li className="nav-item"><a href="/create-reservation" className={`nav-link ${activePage === 'create-reservation' ? 'active' : ''}`}>Reserve a car</a></li>
         )}
         {isManager && (
-          <li className="nav-item"><a href="#" className={`nav-link ${activePage === 'dashboard' ? 'active' : ''}`}>Dashboard</a></li>
+          <li className="nav-item"><a href="/dashboard" className={`nav-link ${activePage === 'dashboard' ? 'active' : ''}`}>Dashboard</a></li>
         )}
         {idToken && (
           <li className="nav-item"><a href="#" onClick={() => handleSignout(idToken)} className="nav-link">Sign Out</a></li>

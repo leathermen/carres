@@ -1,37 +1,45 @@
 import 'react';
+import { Button } from 'react-bootstrap';
+import ReservationListElement from './ReservationListElement';
 
 interface ReservationListElementProps {
+  id: string;
   startsAt: string;
   endsAt: string;
   vehicleDescription: string;
   isCancelled: boolean;
+  onCancel: (id: string) => void;
 };
 
-export default function ReservationListElement({ startsAt, endsAt, vehicleDescription, isCancelled }: ReservationListElementProps) {
-
+export default function AdminReservationListElement({
+  id,
+  startsAt,
+  endsAt,
+  vehicleDescription,
+  isCancelled,
+  onCancel
+}: ReservationListElementProps) {
   const startDate = new Date(startsAt);
-  const endDate = new Date(endsAt);
-
   const hours = getHoursCount(startDate.getTime() - new Date().getTime());
   const pastDue = isPastDue(hours);
-  const agoPhrase = getAgoPhrase(hours);
 
-  return <div className="d-flex justify-content-between align-items-start">
-    <div className="ms-2 me-auto">
-      <div className="fw-bold">{vehicleDescription}</div>
-      <p>
-        <em>
-          {startDate.toLocaleDateString("en-US", { weekday: 'long', day: 'numeric', month: 'long' }) + " " + startDate.toLocaleTimeString('en-US', { timeStyle: "short" })}
-        </em>
-      </p>
+  return <div className="row">
+    <div className="col-3 col-md-2 col-lg-1">
+      <Button
+        size='sm'
+        disabled={pastDue || isCancelled}
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); onCancel(id); }}
+        variant={pastDue || isCancelled ? "secondary" : "danger"}
+      >
+        Cancel
+      </Button>
     </div>
-    {isCancelled && (
-      <><span className='badge bg-danger'>Cancelled!</span>&nbsp;</>
-    )}
-    <span className='badge bg-info'>&nbsp;{getDuration(startDate, endDate)}'</span>&nbsp;
-    <span className={`badge bg-${pastDue || isCancelled ? 'secondary' : 'primary'} rounded-pill`}>{agoPhrase}</span>
+    <div className="col-9 col-md-10 col-lg-11">
+      <ReservationListElement startsAt={startsAt} endsAt={endsAt} vehicleDescription={vehicleDescription} isCancelled={isCancelled} />
+    </div>
   </div>;
-};
+}
+
 
 const getHoursCount = (milliseconds: number): number => Math.round(milliseconds / 1000 / 3600);
 

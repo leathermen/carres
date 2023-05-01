@@ -7,7 +7,6 @@ import { Container } from 'react-bootstrap';
 import Header from '../components/Header';
 import ReservationListElement from '../components/ReservationListElement';
 import { getReservations } from '../utils/client';
-import { RefreshTokenExpiredError } from '../utils/client/types/RefreshTokenExpiredError';
 import Reservation from '../utils/client/types/Reservation';
 import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
 
@@ -30,11 +29,7 @@ export default function Home({ needsReservations: needsReservationsServerSide, i
 
   useEffect(() => {
     if (status === 'authenticated' && needsReservations) {
-      getReservations().then(data => setReservations(data.items)).catch(error => {
-        if (error instanceof RefreshTokenExpiredError) {
-          signIn('keycloak');
-        }
-      });
+      getReservations().then(data => setReservations(data.items));
     }
   }, [needsReservations, status]);
 
@@ -71,12 +66,25 @@ export default function Home({ needsReservations: needsReservationsServerSide, i
             </div>
           )}
           {needsReservations && status === 'authenticated' && (
-            <div className="px-4 py-5 my-5">
-              <div className="col-lg-9 mx-auto">
-                <p className="leam mb-4 text-center">Your reservations</p>
-                <ul>
-                  {reservations.map(r => <ReservationListElement key={r.id} startsAt={r.startsAt} endsAt={r.endsAt} vehicleDescription={r.vehicleDescription} />)}
-                </ul>
+            <div className="px-4 py-1 my-1 text-center">
+              <div className="row">
+                <img className="col-6 col-xl-4 d-block mx-auto mb-4 img-fluid" src="/images/png-transparent-pointing-finger-hand-pointing-direction-point-people-finger-pointing-finger-you-human.png" alt="Pointing finger" />
+                <div className="col-6 col-xl-8 align-middle align-items-center row">
+                  <div className="mx-auto row">
+                    <h1 className="display-5 fw-bold col-12">Your reservations</h1>
+                    <p className="small mb-4 col-12">Just yours. No one else's.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="px-4 py-5 my-5">
+                <p>Reservations</p>
+                <div className="col mx-auto text-start">
+                  <ul className="list-group">
+                    {reservations.map(r => <li key={r.id} className="list-group-item">
+                      <ReservationListElement startsAt={r.startsAt} endsAt={r.endsAt} vehicleDescription={r.vehicleDescription} isCancelled={r.cancelled} />
+                    </li>)}
+                  </ul>
+                </div>
               </div>
             </div>
           )}

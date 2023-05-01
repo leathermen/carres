@@ -3,4 +3,5 @@ export default interface Reservation {
   startsAt: string;
   endsAt: string;
   vehicleDescription: string;
+  cancelled: boolean;
 }

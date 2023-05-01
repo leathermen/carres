@@ -41,3 +41,11 @@ springdoc:
     oauth:
       client-id: app
       client-secret: lpk2c9bzFFvLqnqeTGNCKWJq76UtENMf #for testing purpose only!
+
+keycloak:
+  admin:
+    oauth:
+      host: http://localhost:3001/auth
+      realm: carres
+      client-id: app
+      client-secret: lpk2c9bzFFvLqnqeTGNCKWJq76UtENMf
