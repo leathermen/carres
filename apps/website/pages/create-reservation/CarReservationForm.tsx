@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { ApiError } from '../../utils/client/ApiError';
+import { ApiError } from '../../utils/client/errors/ApiError';
 import { createReservation } from '../../utils/client/apiClient';
 
 
@@ -64,7 +64,7 @@ export default function CarReservationForm({ vehicleId, onSuccess }: CarReservat
       </>)}
       {!!submitError && (<>
         <div className="alert alert-danger" role="alert">
-          {submitError}
+          <div>{submitError}</div>
           <button type="button" className="btn btn-light mt-3" onClick={(e: FormEvent<HTMLButtonElement>) => setSubmitError(null)}>Try again</button>
         </div>
       </>)}

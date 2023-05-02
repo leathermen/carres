@@ -1,14 +1,12 @@
 import { GetServerSideProps } from 'next';
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
-import 'react';
 import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import CarListElement from '../components/CarListElement';
 import Header from '../components/Header';
 import { getCars } from '../utils/client/apiClient';
 import Car from '../utils/client/types/Car';
-import { RefreshTokenExpiredError } from '../utils/client/types/RefreshTokenExpiredError';
 import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
 
 interface NewReservationScreenProps extends SharedSessionData { }
@@ -21,11 +19,7 @@ export default function NewReservationScreen({ isManager, idToken, needsReservat
   useEffect(() => {
     if (status !== 'authenticated') return;
 
-    getCars().then(cars => setCars(cars.items)).catch(error => {
-      if (error instanceof RefreshTokenExpiredError) {
-        signIn('keycloak');
-      }
-    });
+    getCars().then(cars => setCars(cars.items));
   }, [status]);
 
   return (

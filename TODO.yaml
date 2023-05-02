@@ -34,11 +34,11 @@ base:
         + cover with tests
       - create role based access control
         + make fe bundle check the roles
-        - make be check the roles at the controller level
+        + make be check the roles at the controller level
       - create admin cancel reservations screen
-      - create admin vehicles control screen
   postdev:
     - deploy at k8s
+    - end to end tracing
     - ci/cd pipeline
     - grafana metrics & public dashboards
     - google, github and linked in IDPs

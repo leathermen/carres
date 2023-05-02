@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
@@ -27,12 +29,26 @@ public class WebSecurityConfig {
         requests
           .requestMatchers(antMatcher("/h2-console/**"))
           .permitAll()
+          .requestMatchers("/api/*/dashboard/**")
+          .hasAnyAuthority("manager")
           .requestMatchers("/actuator/**", "/open/**", "/api/*/open/**", "/v3/api-docs/**")
           .permitAll();
         requests.anyRequest().authenticated();
       })
-      .oauth2ResourceServer(oauth2 -> oauth2.jwt());
+      .oauth2ResourceServer(oauth2 ->
+        oauth2.jwt().jwtAuthenticationConverter(authenticationConverter())
+      );
 
     return http.build();
+  }
+
+  protected JwtAuthenticationConverter authenticationConverter() {
+    JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    authoritiesConverter.setAuthorityPrefix("");
+    authoritiesConverter.setAuthoritiesClaimName("roles");
+
+    JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+    converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+    return converter;
   }
 }
