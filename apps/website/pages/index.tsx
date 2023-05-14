@@ -49,7 +49,7 @@ export default function Home({ needsReservations: needsReservationsServerSide, i
               <img className="d-block mx-auto mb-4" src="/images/png-transparent-girl-car-dog-driving-anime-japanese-suitcase-travel-thumbnail.png" alt="Why don't you reserve some cars onii-chan" />
               <h1 className="display-5 fw-bold">You need a car</h1>
               <div className="col-lg-6 mx-auto">
-                <p className="lead mb-4">Women unconsciously love men with cars. <br /> Red cars are good. Big cars are better. Big red ones...</p>
+                <p className="lead mb-4">People unconsciously love people with cars. <br /> Red cars are good. Big cars are better. Big red ones...</p>
                 <p className="small mb-4">Alright, this is stereotypical nonsense. You only need a car if you need a ride. <br /> And if you need a ride...</p>
                 <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
                   <button onClick={iNeedReservation} type="button" className="btn btn-primary btn-lg px-4 gap-3">Book the goddamn car</button>

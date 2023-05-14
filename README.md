@@ -17,7 +17,7 @@ The secrets are managed using Hashicorp Vault.
 
 ## Remarkable elements (you should better take a look at)
 
-- [API Swagger UI](https://api.carres.nikitades.com)
+- [API Swagger UI](https://api.carres.nikitades.com/open/swagger-ui)
 - [**Public Sonarcloud report**](https://sonarcloud.io/project/overview?id=leathermen_carres_api)
 - [TODO public Grafana dashboard of business metrics](somewhere)
 

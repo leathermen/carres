@@ -15,9 +15,11 @@ services:
     environment:
       NEXTAUTH_SECRET: YMKLHMQI4f1GOMf83AEUZa9zUWqSdBz39CHY2PMVHM4=
       NEXTAUTH_URL: http://localhost:3001
+      NEXTAUTH_URL_INTERNAL: http://localhost:3000
       KEYCLOAK_CLIENT_ID: app
       KEYCLOAK_CLIENT_SECRET: lpk2c9bzFFvLqnqeTGNCKWJq76UtENMf
-      KEYCLOAK_WELL_KNOWN_ADDRESS: http://keycloak:8080/realms/carres
+      KEYCLOAK_REALM_ADDRESS: http://keycloak:8080/realms/carres
+      NEXT_PUBLIC_API_URL: http://localhost:8080
   api:
     image: nikitades/carres-api:latest
     build: apps/api
@@ -44,7 +46,7 @@ services:
       KC_DB_URL: jdbc:postgresql://database:5432/keycloak
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: keycloak
-    command: ["--verbose", "import", "--override=false", "--file=/opt/keycloak/realm.json"]
+    command: ["--verbose", "import", "--db=postgres", "--override=false", "--file=/opt/keycloak/realm.json"]
   keycloak:
     image: nikitades/carres-keycloak:latest
     build: apps/keycloak

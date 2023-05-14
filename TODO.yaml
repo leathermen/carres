@@ -21,21 +21,21 @@ base:
       - + set up domain layer
         + attach hibernate to start persisting data
         + introduce some data seeding (database population)
-    todo:
-      + create my reservations screen
+      - create my reservations screen
         + the outlook is done
         + cover with tests
-      + create "make new reservation" screen
+      - create "make new reservation" screen
         + the outlook is done
         + cover with tests
-      + create single new reservation screen
+      - create single new reservation screen
         + create the outlook
         + create the api response with the occupied hours
         + cover with tests
       - create role based access control
         + make fe bundle check the roles
         + make be check the roles at the controller level
-      - create admin cancel reservations screen
+      - create admin cancel reservations screen +
+    todo:
   postdev:
     - deploy at k8s
     - end to end tracing

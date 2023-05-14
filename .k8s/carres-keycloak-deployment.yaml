@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carres-keycloak-deployment
+  labels:
+    app: carres-keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carres-keycloak
+  template:
+    metadata:
+      labels:
+        app: carres-keycloak
+    spec:
+      initContainers:
+        - name: init-keycloak
+          image: nikitades/carres-keycloak:latest
+          args: ["--verbose", "import", "--override=false", "--file=/opt/keycloak/realm.json"]
+          volumeMounts:
+            - mountPath: /opt/keycloak/realm.json
+              name: keycloak-dump
+          env:
+            - name: KC_DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-keycloak-config
+                  key: database-url
+            - name: KC_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: carres-keycloak-secret
+                  key: kc-db-username
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: carres-keycloak-secret
+                  key: kc-db-password
+      containers:
+        - name: carres-keycloak
+          image: nikitades/carres-keycloak:latest
+          args:
+            [
+              "start",
+              "--optimized",
+              "--http-enabled=true",
+              "--hostname-strict-https=false",
+              "--hostname-strict=false",
+              "--proxy=passthrough"
+            ]
+          ports:
+            - containerPort: 8080
+          env:
+            - name: KC_DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-keycloak-config
+                  key: database-url
+            - name: KC_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: carres-keycloak-secret
+                  key: kc-db-username
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: carres-keycloak-secret
+                  key: kc-db-password
+            - name: KEYCLOAK_ADMIN
+              valueFrom:
+                secretKeyRef:
+                  name: carres-keycloak-secret
+                  key: admin-username
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: carres-keycloak-secret
+                  key: admin-password
+      volumes:
+        - name: keycloak-dump
+          hostPath:
+            path: /minikube-host/ars/Code/Personal/java/cars-reservation/apps/keycloak/realm.json
+            type: File

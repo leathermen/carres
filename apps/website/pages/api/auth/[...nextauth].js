@@ -50,6 +50,14 @@ const options = {
       return session;
     },
   },
+  events: {
+    async signOut({ token }) {
+      await fetch(
+        `${process.env.KEYCLOAK_REALM_ADDRESS}/protocol/openid-connect/logout?id_token_hint=` +
+          token.idToken
+      );
+    },
+  },
 };
 
 export default (req, res) => {

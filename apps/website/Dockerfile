@@ -26,11 +26,9 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN \
-  NEXTAUTH_SECRET=APP_NEXTAUTH_SECRET \
   NEXTAUTH_URL=APP_NEXTAUTH_URL \
-  KEYCLOAK_CLIENT_ID=APP_KEYCLOAK_CLIENT_ID \
-  KEYCLOAK_CLIENT_SECRET=APP_KEYCLOAK_CLIENT_SECRET \
-  KEYCLOAK_WELL_KNOWN_ADDRESS=APP_KEYCLOAK_WELL_KNOWN_ADDRESS \
+  NEXTAUTH_URL_INTERNAL=APP_NEXTAUTH_URL_INTERNAL \
+  NEXT_PUBLIC_API_URL=APP_NEXT_PUBLIC_API_URL \
   yarn build
 
 # If using npm comment out above and use below instead
@@ -42,6 +40,7 @@ WORKDIR /app
 
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
+# No thanks I love telemetry
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN addgroup --system --gid 1001 nodejs

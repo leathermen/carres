@@ -46,11 +46,8 @@ const getUsersReservations = async (id: string, page: number = 0) => {
 };
 
 const cancelReservation = async (id: string) => {
-  return await makeApiCall<null, null>(
-    "delete",
-    `/api/v1/dashboard/user-reservations/${id}`
-  )
-}
+  return await makeApiCall<null, null>("delete", `/api/v1/dashboard/user-reservations/${id}`);
+};
 
 const reloadSession = () => {
   const event = new Event("visibilitychange");
