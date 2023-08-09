@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carres-api-deployment
+  labels:
+    app: carres-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carres-api
+  template:
+    metadata:
+      labels:
+        app: carres-api
+    spec:
+      containers:
+        - name: carres-api
+          image: nikitades/carres-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-api-config
+                  key: database-url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: carres-api-secret
+                  key: database-username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: carres-api-secret
+                  key: database-password
+            - name: SPRING_JPA_DATABASE_PLATFORM
+              value: org.hibernate.dialect.PostgreSQLDialect
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-api-config
+                  key: keycloak-issuer-url
+            - name: KEYCLOAK_ADMIN_OAUTH_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-api-config
+                  key: keycloak-base-url
+            - name: KEYCLOAK_ADMIN_OAUTH_REALM
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-api-config
+                  key: keycloak-realm
+            - name: KEYCLOAK_ADMIN_OAUTH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: carres-api-secret
+                  key: keycloak-client-id
+            - name: KEYCLOAK_ADMIN_OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: carres-api-secret
+                  key: keycloak-client-secret

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: carres-website-config
+data:
+  nextauth-url: http://carres.local
+  nextauth-url-internal: http://localhost:3000
+  keycloak-issuer-url: http://sso.carres.local/realms/carres
+  api-url: http://api.carres.local
+  app-url: http://carres.local

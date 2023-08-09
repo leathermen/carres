@@ -12,7 +12,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
     enabled: true #auto migrate on startup
     sql-migration-prefix: V
@@ -28,3 +28,11 @@ springdoc:
       client-id: someclientid
       client-secret: someclientsecret
       use-basic-authentication-with-access-code-grant: true
+
+keycloak:
+  admin:
+    oauth:
+      host: http://example.com #the same as for jwt issuer
+      realm: carres
+      client-id: someclientid
+      client-secret: someclientsecret

@@ -1,8 +1,6 @@
 import { signIn, signOut } from "next-auth/react";
 import 'react';
 
-const APP_ADDRESS = process.env.NEXT_PUBLIC_APP_URL;
-
 interface HeaderProps {
   activePage: string;
   idToken: string | null;
@@ -11,13 +9,11 @@ interface HeaderProps {
 }
 
 export default function Header({ activePage, idToken, isManager, needsReservation }: HeaderProps) {
-  const handleSignin = () => {
-    signIn('keycloak');
+  const handleSignin = async () => {
+    await signIn('keycloak');
   };
-  const handleSignout = (idToken: string) => {
-    signOut({
-      callbackUrl: '/auth/realms/carres/protocol/openid-connect/logout?id_token_hint=' + idToken + '&post_logout_redirect_uri=' + APP_ADDRESS,
-    });
+  const handleSignout = async () => {
+    await signOut();
   };
 
   return (
@@ -31,10 +27,10 @@ export default function Header({ activePage, idToken, isManager, needsReservatio
           <li className="nav-item"><a href="/dashboard" className={`nav-link ${activePage === 'dashboard' ? 'active' : ''}`}>Dashboard</a></li>
         )}
         {idToken && (
-          <li className="nav-item"><a href="#" onClick={() => handleSignout(idToken)} className="nav-link">Sign Out</a></li>
+          <li className="nav-item"><a href="#" onClick={async () => await handleSignout()} className="nav-link">Sign Out</a></li>
         )}
         {!idToken && (
-          <li className="nav-item"><a href="#" onClick={() => handleSignin()} className="nav-link">Sign In</a></li>
+          <li className="nav-item"><a href="#" onClick={async () => await handleSignin()} className="nav-link">Sign In</a></li>
         )}
       </ul>
     </header>

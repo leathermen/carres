@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: carres-api-config
+data:
+  database-url: jdbc:postgresql://postgres:5432/carres
+  keycloak-base-url: http://carres-keycloak:8080
+  keycloak-issuer-url: http://sso.carres.local/realms/carres
+  keycloak-realm: carres
