@@ -17,6 +17,13 @@ spec:
       containers:
         - name: carres-api
           image: ghcr.io/nikitades/carres-api:latest
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
           ports:
             - containerPort: 8080
           env:
@@ -42,6 +49,11 @@ spec:
                 configMapKeyRef:
                   name: carres-api-config
                   key: keycloak-issuer-url
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_AUDIENCES
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-api-config
+                  key: keycloak-realm
             - name: KEYCLOAK_ADMIN_OAUTH_HOST
               valueFrom:
                 configMapKeyRef:

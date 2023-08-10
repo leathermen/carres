@@ -1,5 +1,7 @@
 name: Merged to Master
 
+concurrency: master
+
 on:
   push:
     branches:
@@ -30,6 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.api == 'true' }}
+    timeout-minutes: 3
     defaults:
       run:
         working-directory: apps/api
@@ -58,79 +61,92 @@ jobs:
   build-api-image:
     runs-on: ubuntu-latest
     needs: test-api
-    defaults:
-      run:
-        working-directory: apps/api
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-buildx-action@v2
+        with:
+          platforms: linux/arm64
       - uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - uses: docker/build-push-action@v3
         with:
           push: true
           tags: |
             ghcr.io/nikitades/carres-api:latest
             ghcr.io/nikitades/carres-api:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
+          context: apps/api
+          platforms: linux/arm64
 
   build-website-image:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.website == 'true' }}
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: apps/website
     steps:
       - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-buildx-action@v2
+        with:
+          platforms: linux/arm64
       - uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - uses: docker/build-push-action@v3
         with:
           push: true
           tags: |
             ghcr.io/nikitades/carres-website:latest
             ghcr.io/nikitades/carres-website:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=website
+          cache-to: type=gha,mode=max,scope=website
+          context: apps/website
+          platforms: linux/arm64
 
   build-keycloak-image:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.keycloak == 'true' }}
+    timeout-minutes: 5
     defaults:
       run:
         working-directory: apps/website
     steps:
       - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-buildx-action@v2
+        with:
+          platforms: linux/arm64
       - uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GH_PACKAGES_TOKEN }}
       - uses: docker/build-push-action@v3
         with:
           push: true
           tags: |
-            ghcr.io/nikitades/carrer-keycloak:latest
+            ghcr.io/nikitades/carres-keycloak:latest
             ghcr.io/nikitades/carres-keycloak:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=keycloak
+          cache-to: type=gha,mode=max,scope=keycloak
+          context: apps/keycloak
+          platforms: linux/arm64
 
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     needs: [build-api-image, build-website-image, build-keycloak-image]
     if: ${{ always() && needs.build-api-image.result != 'failure' && needs.build-website-image.result != 'failure' && needs.build-keycloak-image.result != 'failure' && (needs.build-api-image.result == 'success' || needs.build-website-image.result == 'success' || needs.build-keycloak-image.result == 'success') }}
+    timeout-minutes: 7
     steps:
       - name: Set the Kubernetes context
         uses: azure/k8s-set-context@v2
@@ -139,11 +155,11 @@ jobs:
           k8s-url: ${{ secrets.KUBERNETES_SERVER_URL }}
           k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
       - uses: actions/checkout@v3
-      - uses: azure/k8s-deploy@v1
+      - uses: azure/k8s-deploy@v4
         with:
           namespace: carres
-          manifests: |
-            .k8s/prod
+          imagepullsecrets: ghcr
+          manifests: .k8s/prod
           images: |
             ghcr.io/nikitades/carres-api:${{ github.sha }}
             ghcr.io/nikitades/carres-website:${{ github.sha }}

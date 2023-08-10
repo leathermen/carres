@@ -4,3 +4,4 @@ metadata:
   name: carres-keycloak-config
 data:
   database-url: jdbc:postgresql://postgres:5432/keycloak-prod
+  hostname: https://cars-reservation-sso.nikitades.com

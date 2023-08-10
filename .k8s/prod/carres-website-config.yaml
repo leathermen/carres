@@ -5,6 +5,6 @@ metadata:
 data:
   nextauth-url: https://cars-reservation.nikitades.com
   nextauth-url-internal: http://localhost:3000
-  keycloak-issuer-url: https://cars-reservation-sso.nikitades.com/realms/carres
+  keycloak-issuer-url: https://cars-reservation-sso.nikitades.com/realms/carres-prod
   api-url: https://cars-reservation-api.nikitades.com
   app-url: https://cars-reservation.nikitades.com
