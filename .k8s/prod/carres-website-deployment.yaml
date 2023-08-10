@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carres-website-deployment
+  labels:
+    app: carres-website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carres-website
+  template:
+    metadata:
+      labels:
+        app: carres-website
+    spec:
+      containers:
+        - name: carres-website
+          image: ghcr.io/nikitades/carres-website:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: carres-website-secret
+                  key: nextauth-secret
+            - name: NEXTAUTH_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-website-config
+                  key: nextauth-url
+            - name: NEXTAUTH_URL_INTERNAL
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-website-config
+                  key: nextauth-url-internal
+            - name: KEYCLOAK_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: carres-website-secret
+                  key: keycloak-client-id
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: carres-website-secret
+                  key: keycloak-client-secret
+            - name: KEYCLOAK_REALM_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-website-config
+                  key: keycloak-issuer-url
+            - name: NEXT_PUBLIC_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-website-config
+                  key: api-url

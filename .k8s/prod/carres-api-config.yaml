@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: carres-api-config
+data:
+  database-url: jdbc:postgresql://postgres:5432/carres-prod
+  keycloak-base-url: http://carres-keycloak:8080
+  keycloak-issuer-url: https://cars-reservation-sso.nikitades.com/realms/carres
+  keycloak-realm: carres-prod
