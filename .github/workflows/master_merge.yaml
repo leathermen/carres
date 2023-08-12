@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - master
-      - deploy-k8s
 
 jobs:
   detect-changes:
@@ -15,6 +14,7 @@ jobs:
       api: ${{ steps.filter.outputs.api }}
       website: ${{ steps.filter.outputs.website }}
       keycloak: ${{ steps.filter.outputs.keycloak }}
+      k8s: ${{ steps.filter.outputs.k8s }}
     steps:
       - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
@@ -27,6 +27,8 @@ jobs:
               - apps/website/**
             keycloak:
               - apps/keycloak/**
+            k8s:
+              - .k8s/prod/**
 
   test-api:
     runs-on: ubuntu-latest
@@ -144,8 +146,8 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    needs: [build-api-image, build-website-image, build-keycloak-image]
-    if: ${{ always() && needs.build-api-image.result != 'failure' && needs.build-website-image.result != 'failure' && needs.build-keycloak-image.result != 'failure' && (needs.build-api-image.result == 'success' || needs.build-website-image.result == 'success' || needs.build-keycloak-image.result == 'success') }}
+    needs: [detect-changes, build-api-image, build-website-image, build-keycloak-image]
+    if: ${{ always() && needs.build-api-image.result != 'failure' && needs.build-website-image.result != 'failure' && needs.build-keycloak-image.result != 'failure' && (needs.detect-changes.outputs.k8s == 'true' || needs.build-api-image.result == 'success' || needs.build-website-image.result == 'success' || needs.build-keycloak-image.result == 'success') }}
     timeout-minutes: 7
     steps:
       - name: Set the Kubernetes context
@@ -161,6 +163,6 @@ jobs:
           imagepullsecrets: ghcr
           manifests: .k8s/prod
           images: |
-            ghcr.io/nikitades/carres-api:${{ github.sha }}
-            ghcr.io/nikitades/carres-website:${{ github.sha }}
-            ghcr.io/nikitades/carres-keycloak:${{ github.sha }}
+            ghcr.io/nikitades/carres-api:latest
+            ghcr.io/nikitades/carres-website:latest
+            ghcr.io/nikitades/carres-keycloak:latest

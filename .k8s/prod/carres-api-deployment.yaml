@@ -19,11 +19,11 @@ spec:
           image: ghcr.io/nikitades/carres-api:latest
           resources:
             limits:
-              cpu: 200m
-              memory: 256Mi
+              cpu: 400m
+              memory: 512Mi
             requests:
-              cpu: 200m
-              memory: 256Mi
+              cpu: 300m
+              memory: 384Mi
           ports:
             - containerPort: 8080
           env:
