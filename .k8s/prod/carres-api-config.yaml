@@ -5,5 +5,5 @@ metadata:
 data:
   database-url: jdbc:postgresql://postgres:5432/carres-prod
   keycloak-base-url: http://carres-keycloak:8080
-  keycloak-issuer-url: https://cars-reservation-sso.nikitades.com/realms/carres
+  keycloak-issuer-url: https://cars-reservation-sso.nikitades.com/realms/carres-prod
   keycloak-realm: carres-prod

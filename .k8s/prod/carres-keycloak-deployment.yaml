@@ -24,8 +24,15 @@ spec:
               "--http-enabled=true",
               "--hostname-strict-https=false",
               "--hostname-strict=false",
-              "--proxy=passthrough"
+              "--proxy=passthrough",
             ]
+          resources:
+            limits:
+              cpu: 300m
+              memory: 384Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
           ports:
             - containerPort: 8080
           env:
@@ -54,3 +61,13 @@ spec:
                 secretKeyRef:
                   name: carres-keycloak-secret
                   key: admin-password
+            - name: KC_HOSTNAME_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-keycloak-config
+                  key: hostname
+            - name: KC_HOSTNAME_ADMIN_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-keycloak-config
+                  key: hostname
