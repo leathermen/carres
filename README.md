@@ -15,7 +15,6 @@ This whole project is expected to visualize the idea of the web application. The
 
 The project is hosted at Hetzner, using Kubernetes setup.
 The Continuous Integration is done using GitHub actions.
-The secrets are managed using Hashicorp Vault.
 
 DDOS mitigation is achieved by hiding the real IP address of the cluster entrypoints, by reverse proxying all the requests through CloudFlare system. It's known for being able to withstand attacks of a solid numbers of requests.
 

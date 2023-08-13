@@ -14,9 +14,12 @@ spec:
       labels:
         app: carres-keycloak
     spec:
+      imagePullSecrets:
+        - name: ghcr
       containers:
         - name: carres-keycloak
-          image: ghcr.io/nikitades/carres-keycloak:latest
+          image: nikitades/carres-keycloak:latest
+          imagePullPolicy: Always
           args:
             [
               "start",

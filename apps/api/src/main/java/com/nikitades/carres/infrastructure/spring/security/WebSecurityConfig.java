@@ -31,8 +31,12 @@ public class WebSecurityConfig {
           .permitAll()
           .requestMatchers("/api/*/dashboard/**")
           .hasAnyAuthority("manager")
-          .requestMatchers("/actuator/**", "/open/**", "/api/*/open/**", "/v3/api-docs/**")
-          .permitAll();
+          .requestMatchers("/open/**", "/api/*/open/**", "/v3/api-docs/**")
+          .permitAll()
+          .requestMatchers("/actuator/health")
+          .permitAll()
+          .requestMatchers("/actuator/prometheus")
+          .hasAnyAuthority("metrics-scraper");
         requests.anyRequest().authenticated();
       })
       .oauth2ResourceServer(oauth2 ->

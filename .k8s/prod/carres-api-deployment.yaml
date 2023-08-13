@@ -14,9 +14,12 @@ spec:
       labels:
         app: carres-api
     spec:
+      imagePullSecrets:
+        - name: ghcr
       containers:
         - name: carres-api
-          image: ghcr.io/nikitades/carres-api:latest
+          image: nikitades/carres-api:latest
+          imagePullPolicy: Always
           resources:
             limits:
               cpu: 400m

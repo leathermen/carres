@@ -36,6 +36,10 @@ spring:
               action: update
               create-target: src/main/resources/db/migration/Vx_x_x__dummy_migration.sql
 
+  output:
+    ansi:
+      enabled: always
+
 springdoc:
   swagger-ui:
     oauth:
