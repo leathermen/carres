@@ -9,6 +9,7 @@ import ReservationListElement from '../components/ReservationListElement';
 import { getReservations } from '../utils/client';
 import Reservation from '../utils/client/types/Reservation';
 import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
+import OGTags from '../components/OGTags';
 
 const RESERVATION_COOKIE_NAME = "i_need_reservations";
 
@@ -38,6 +39,7 @@ export default function Home({ needsReservations: needsReservationsServerSide, i
       <Head>
         <title>Cars Reservation</title>
         <link rel="icon" href="/favicon.ico" />
+        <OGTags />
       </Head>
       <Container>
         <Header idToken={idToken} isManager={isManager} activePage='home' needsReservation={needsReservations} />

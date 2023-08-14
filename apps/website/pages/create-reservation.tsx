@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import { getCars } from '../utils/client/apiClient';
 import Car from '../utils/client/types/Car';
 import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
+import OGTags from '../components/OGTags';
 
 interface NewReservationScreenProps extends SharedSessionData { }
 
@@ -27,6 +28,7 @@ export default function NewReservationScreen({ isManager, idToken, needsReservat
       <Head>
         <title>Cars Reservation</title>
         <link rel="icon" href="/favicon.ico" />
+        <OGTags />
       </Head>
       <Container>
         <Header isManager={isManager} idToken={idToken} activePage='create-reservation' needsReservation={needsReservations} />

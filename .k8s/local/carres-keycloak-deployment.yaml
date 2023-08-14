@@ -17,7 +17,7 @@ spec:
       initContainers:
         - name: init-keycloak
           image: nikitades/carres-keycloak:latest
-          args: ["--verbose", "import", "--override=false", "--file=/opt/keycloak/realm.json"]
+          args: ["--verbose", "import", "--optimized", "--override=false", "--file=/opt/keycloak/realm.json"]
           volumeMounts:
             - mountPath: /opt/keycloak/realm.json
               name: keycloak-dump

@@ -9,6 +9,7 @@ import Reservation from '../../utils/client/types/Reservation';
 import { useEffect, useState } from 'react';
 import { getUsersReservations, cancelReservation as cancelReservationApi } from '../../utils/client/apiClient';
 import AdminUserEmailForm from '../../components/AdminUserEmailForm';
+import OGTags from '../../components/OGTags';
 
 interface DashboardProps extends SharedSessionData { }
 
@@ -47,6 +48,7 @@ export default function Dashboard({ needsReservations, idToken, isManager }: Das
       <Head>
         <title>Cars Reservation</title>
         <link rel="icon" href="/favicon.ico" />
+        <OGTags />
       </Head>
       <Container>
         <Header idToken={idToken} isManager={isManager} activePage='dashboard' needsReservation={needsReservations} />

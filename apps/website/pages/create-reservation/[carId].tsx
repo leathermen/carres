@@ -8,6 +8,7 @@ import { getCar } from '../../utils/client/apiClient';
 import Car from '../../utils/client/types/Car';
 import { SharedSessionData, getSessionData } from '../../utils/session/getSharedSessionData';
 import CarReservationForm from './CarReservationForm';
+import OGTags from '../../components/OGTags';
 
 interface CarReservationPageProps extends SharedSessionData { }
 
@@ -25,6 +26,7 @@ export default function CarReservationPage({ idToken, isManager, needsReservatio
     <Head>
       <title>Cars Reservation</title>
       <link rel="icon" href="/favicon.ico" />
+        <OGTags />
     </Head>
     <Container>
       <Header idToken={idToken} isManager={isManager} activePage='create-reservation' needsReservation={needsReservations} />
