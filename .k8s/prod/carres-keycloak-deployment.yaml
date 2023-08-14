@@ -14,8 +14,6 @@ spec:
       labels:
         app: carres-keycloak
     spec:
-      imagePullSecrets:
-        - name: ghcr
       containers:
         - name: carres-keycloak
           image: nikitades/carres-keycloak:latest

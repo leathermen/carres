@@ -158,7 +158,6 @@ jobs:
       - uses: azure/k8s-deploy@v4
         with:
           namespace: carres
-          imagepullsecrets: ghcr
           manifests: .k8s/prod
           images: |
             nikitades/carres-api:latest

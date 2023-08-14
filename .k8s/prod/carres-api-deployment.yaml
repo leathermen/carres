@@ -14,8 +14,6 @@ spec:
       labels:
         app: carres-api
     spec:
-      imagePullSecrets:
-        - name: ghcr
       containers:
         - name: carres-api
           image: nikitades/carres-api:latest
