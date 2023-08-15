@@ -163,3 +163,4 @@ jobs:
             nikitades/carres-api:latest
             nikitades/carres-website:latest
             nikitades/carres-keycloak:latest
+          force: true
