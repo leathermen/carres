@@ -9,19 +9,14 @@ const globalCounters = globalThis as unknown as {
 
 let counters: Counters;
 
-if (process.env.NODE_ENV === "production") {
+if (!globalCounters.defaultMetricsCollected) {
   collectDefaultMetrics();
-  counters = new Counters();
-} else {
-  if (!globalCounters.defaultMetricsCollected) {
-    collectDefaultMetrics();
-    globalCounters.defaultMetricsCollected = true;
-  }
-  if (!globalCounters.counters) {
-    globalCounters.counters = new Counters();
-  }
-  counters = globalCounters.counters;
+  globalCounters.defaultMetricsCollected = true;
 }
+if (!globalCounters.counters) {
+  globalCounters.counters = new Counters();
+}
+counters = globalCounters.counters;
 
 export const addHttpVisit = (path: string, userAgent: string) =>
   counters.httpVisits.inc({
@@ -30,7 +25,8 @@ export const addHttpVisit = (path: string, userAgent: string) =>
   });
 
 export const addMainPageVisit = () => counters.mainPageVisits.inc();
-export const addAvailableForReservationPageVisit = () => counters.availableForReservationPageVisits.inc();
+export const addAvailableForReservationPageVisit = () =>
+  counters.availableForReservationPageVisits.inc();
 export const addDashboardPageVisit = () => counters.dashboardPageVisits.inc();
 
 export const addSignIn = (login: string) => counters.signIns.inc({ login });

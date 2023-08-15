@@ -147,6 +147,8 @@ jobs:
     needs: [detect-changes, build-api-image, build-website-image, build-keycloak-image]
     if: ${{ always() && needs.build-api-image.result != 'failure' && needs.build-website-image.result != 'failure' && needs.build-keycloak-image.result != 'failure' && (github.event_name == 'pull_request' || needs.detect-changes.outputs.k8s == 'true' || needs.build-api-image.result == 'success' || needs.build-website-image.result == 'success' || needs.build-keycloak-image.result == 'success') }}
     timeout-minutes: 7
+    env:
+      CURRENT_TIME:
     steps:
       - name: Set the Kubernetes context
         uses: azure/k8s-set-context@v2
@@ -155,23 +157,25 @@ jobs:
           k8s-url: ${{ secrets.KUBERNETES_SERVER_URL }}
           k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
       - uses: actions/checkout@v3
+      - id: get-current-time
+        run: echo "CURRENT_TIME=$(date +%Y-%m-%dT%T.%9N%:z)" >> "$GITHUB_OUTPUT"
       - uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: .k8s/prod/carres-api-deployment.yaml
           propertyPath: spec.template.metadata.creationTimestamp
-          value: ${{ github.event.repository.updated_at }}
+          value: ${{ steps.get-current-time.outputs.CURRENT_TIME }}
           commitChange: false
       - uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: .k8s/prod/carres-website-deployment.yaml
           propertyPath: spec.template.metadata.creationTimestamp
-          value: ${{ github.event.repository.updated_at }}
+          value: ${{ steps.get-current-time.outputs.CURRENT_TIME }}
           commitChange: false
       - uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: .k8s/prod/carres-keycloak-deployment.yaml
           propertyPath: spec.template.metadata.creationTimestamp
-          value: ${{ github.event.repository.updated_at }}
+          value: ${{ steps.get-current-time.outputs.CURRENT_TIME }}
           commitChange: false
       - uses: azure/k8s-deploy@v4
         with:
