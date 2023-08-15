@@ -18,8 +18,8 @@ spring:
 
   sql:
     init:
-      mode: always
-      data-locations: classpath:db/seeds/init.sql
+      # mode: always
+      # data-locations: classpath:db/seeds/init.sql
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

@@ -11,7 +11,7 @@ public class AnalyticsReporter {
   private final String RESERVATIONS_CREATED = "carres_api_reservations_created";
 
   public AnalyticsReporter(MeterRegistry registry) {
-    Counter.builder(RESERVATIONS_CREATED).tags("model", "", "manufacturer").register(registry);
+    Counter.builder(RESERVATIONS_CREATED).tags("model", "", "manufacturer", "").register(registry);
   }
 
   public void addReservationCreated(String model, String manufacturer) {
