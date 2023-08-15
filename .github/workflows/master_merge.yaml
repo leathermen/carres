@@ -155,6 +155,24 @@ jobs:
           k8s-url: ${{ secrets.KUBERNETES_SERVER_URL }}
           k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
       - uses: actions/checkout@v3
+      - uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: .k8s/prod/carres-api-deployment.yaml
+          propertyPath: spec.template.metadata.creationTimestamp
+          value: ${{ github.event.repository.updated_at }}
+          commitChange: false
+      - uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: .k8s/prod/carres-website-deployment.yaml
+          propertyPath: spec.template.metadata.creationTimestamp
+          value: ${{ github.event.repository.updated_at }}
+          commitChange: false
+      - uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: .k8s/prod/carres-keycloak-deployment.yaml
+          propertyPath: spec.template.metadata.creationTimestamp
+          value: ${{ github.event.repository.updated_at }}
+          commitChange: false
       - uses: azure/k8s-deploy@v4
         with:
           namespace: carres
