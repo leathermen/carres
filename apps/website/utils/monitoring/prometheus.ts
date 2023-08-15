@@ -1,37 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Counter, register, collectDefaultMetrics } from "prom-client";
+import Counters from "./counters";
 
 const globalCounters = globalThis as unknown as {
   defaultMetricsCollected: true | undefined;
-  httpVisits: Counter | undefined;
+  counters: Counters | undefined;
 };
 
-let httpVisits: Counter;
+let counters: Counters;
 
 if (process.env.NODE_ENV === "production") {
   collectDefaultMetrics();
-  httpVisits = new Counter({
-    name: "http_requests_total",
-    help: "Total number of HTTP requests",
-    labelNames: ["path", "userAgent"],
-  });
+  counters = new Counters();
 } else {
   if (!globalCounters.defaultMetricsCollected) {
     collectDefaultMetrics();
     globalCounters.defaultMetricsCollected = true;
   }
-  if (!globalCounters.httpVisits) {
-    globalCounters.httpVisits = new Counter({
-      name: "http_requests_total",
-      help: "Total number of HTTP requests",
-      labelNames: ["path", "userAgent"],
-    });
+  if (!globalCounters.counters) {
+    globalCounters.counters = new Counters();
   }
-  httpVisits = globalCounters.httpVisits;
+  counters = globalCounters.counters;
 }
 
 export const addHttpVisit = (path: string, userAgent: string) =>
-  httpVisits.inc({
+  counters.httpVisits.inc({
     path,
     userAgent,
   });
+
+export const addMainPageVisit = () => counters.mainPageVisits.inc();
+export const addAvailableForReservationPageVisit = () => counters.availableForReservationPageVisits.inc();
+export const addDashboardPageVisit = () => counters.dashboardPageVisits.inc();
+
+export const addSignIn = (login: string) => counters.signIns.inc({ login });
+export const addSignOut = (login: string) => counters.signOuts.inc({ login });

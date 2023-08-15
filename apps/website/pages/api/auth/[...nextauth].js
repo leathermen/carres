@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Keycloak from "next-auth/providers/keycloak";
 import refreshAccessToken from "../../../utils/api/refreshAccessToken";
+import { addSignIn, addSignOut } from "../../../utils/monitoring/prometheus";
 
 const options = {
   providers: [
@@ -52,10 +53,14 @@ const options = {
   },
   events: {
     async signOut({ token }) {
+      addSignOut(token.email);
       await fetch(
         `${process.env.KEYCLOAK_REALM_ADDRESS}/protocol/openid-connect/logout?id_token_hint=` +
           token.idToken
       );
+    },
+    async signIn({ user }) {
+      addSignIn(user.email);
     },
   },
 };

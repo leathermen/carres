@@ -10,6 +10,7 @@ import com.nikitades.carres.domain.ReservationRepository;
 import com.nikitades.carres.domain.exception.BadReservationDurationException;
 import com.nikitades.carres.domain.exception.CannotReserveVehicleForTooSoonException;
 import com.nikitades.carres.domain.exception.ReservationOverlapsWithAnotherOneException;
+import com.nikitades.carres.infrastructure.prometheus.AnalyticsReporter;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class ReservationModule {
   private final ReservationRepository reservationRepository;
   private final CarRepository carRepository;
   private final UuidProvider uuidProvider;
+  private final AnalyticsReporter analyticsReporter;
 
   public List<Reservation> getReservations(UUID userId) {
     return reservationRepository.findByOwnerIdOrderByStartsAtDesc(userId);
@@ -67,6 +69,8 @@ public class ReservationModule {
     }
 
     reservationRepository.save(reservation);
+
+    analyticsReporter.addReservationCreated(car.get().getModel(), car.get().getManufacturer());
 
     return reservation;
   }

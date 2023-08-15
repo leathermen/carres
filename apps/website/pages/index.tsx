@@ -1,6 +1,6 @@
 import { setCookie } from 'cookies-next';
 import type { GetServerSideProps } from 'next';
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
@@ -10,8 +10,7 @@ import { getReservations } from '../utils/client';
 import Reservation from '../utils/client/types/Reservation';
 import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
 import OGTags from '../components/OGTags';
-import { addHttpVisit } from '../utils/monitoring/prometheus';
-import { userAgent } from 'next/server';
+import { addHttpVisit, addMainPageVisit } from '../utils/monitoring/prometheus';
 
 const RESERVATION_COOKIE_NAME = "i_need_reservations";
 
@@ -102,6 +101,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   const sharedSessionData = await getSessionData(req);
 
   addHttpVisit(req.url ?? "?", req.headers["user-agent"] ?? "?");
+  addMainPageVisit();
 
   return {
     props: { ...sharedSessionData }

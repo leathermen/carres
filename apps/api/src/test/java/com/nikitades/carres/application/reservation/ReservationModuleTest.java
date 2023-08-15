@@ -3,6 +3,8 @@ package com.nikitades.carres.application.reservation;
 import static org.instancio.Select.field;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.nikitades.carres.application.UuidProvider;
@@ -13,6 +15,7 @@ import com.nikitades.carres.domain.CarRepository;
 import com.nikitades.carres.domain.Reservation;
 import com.nikitades.carres.domain.ReservationRepository;
 import com.nikitades.carres.infrastructure.java.JavaUuidProvider;
+import com.nikitades.carres.infrastructure.prometheus.AnalyticsReporter;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -36,13 +39,17 @@ class ReservationModuleTest {
   @Mock
   CarRepository carRepository;
 
+  @Mock
+  AnalyticsReporter analyticsReporter;
+
   UuidProvider uuidProvider = new JavaUuidProvider();
 
   ReservationModule instance;
 
   @BeforeEach
   void init() {
-    instance = new ReservationModule(reservationRepository, carRepository, uuidProvider);
+    instance =
+      new ReservationModule(reservationRepository, carRepository, uuidProvider, analyticsReporter);
   }
 
   @Test
@@ -136,5 +143,29 @@ class ReservationModuleTest {
         );
       }
     );
+  }
+
+  @Test
+  void whenReservationSuccessfullyCreated_thenAnalyticsCounterIncremented() {
+    //Given that there are some cars in the database
+    Car car = Instancio.of(Car.class).create();
+    when(carRepository.findById(any(UUID.class))).thenReturn(Optional.of(car));
+
+    //when a reservation is created
+    instance.createReservation(
+      UUID.randomUUID(),
+      UUID.randomUUID(),
+      LocalDateTime
+        .now()
+        .plus(Duration.ofDays(1))
+        .withHour(15)
+        .withMinute(15)
+        .toInstant(ZoneOffset.UTC),
+      15
+    );
+
+    //analytics method is surely called
+    verify(analyticsReporter, times(1))
+      .addReservationCreated(car.getModel(), car.getManufacturer());
   }
 }
