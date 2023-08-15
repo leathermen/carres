@@ -9,6 +9,7 @@ import Car from '../../utils/client/types/Car';
 import { SharedSessionData, getSessionData } from '../../utils/session/getSharedSessionData';
 import CarReservationForm from './CarReservationForm';
 import OGTags from '../../components/OGTags';
+import { addHttpVisit } from '../../utils/monitoring/prometheus';
 
 interface CarReservationPageProps extends SharedSessionData { }
 
@@ -77,6 +78,8 @@ const getYearFromDateString = (dateString: string): string => {
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req, params }) => {
   const sharedSessionData = await getSessionData(req);
+  
+  addHttpVisit(req.url ?? "?", req.headers["user-agent"] ?? "?");
 
   return {
     props: {

@@ -9,6 +9,7 @@ import { getCars } from '../utils/client/apiClient';
 import Car from '../utils/client/types/Car';
 import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
 import OGTags from '../components/OGTags';
+import { addHttpVisit } from '../utils/monitoring/prometheus';
 
 interface NewReservationScreenProps extends SharedSessionData { }
 
@@ -69,6 +70,8 @@ export default function NewReservationScreen({ isManager, idToken, needsReservat
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   const sharedSessionData = await getSessionData(req);
+
+  addHttpVisit(req.url ?? "?", req.headers["user-agent"] ?? "?");
 
   return {
     props: { ...sharedSessionData }

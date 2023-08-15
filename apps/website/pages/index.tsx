@@ -10,6 +10,8 @@ import { getReservations } from '../utils/client';
 import Reservation from '../utils/client/types/Reservation';
 import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
 import OGTags from '../components/OGTags';
+import { addHttpVisit } from '../utils/monitoring/prometheus';
+import { userAgent } from 'next/server';
 
 const RESERVATION_COOKIE_NAME = "i_need_reservations";
 
@@ -98,6 +100,8 @@ export default function Home({ needsReservations: needsReservationsServerSide, i
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   const sharedSessionData = await getSessionData(req);
+
+  addHttpVisit(req.url ?? "?", req.headers["user-agent"] ?? "?");
 
   return {
     props: { ...sharedSessionData }

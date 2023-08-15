@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { getUsersReservations, cancelReservation as cancelReservationApi } from '../../utils/client/apiClient';
 import AdminUserEmailForm from '../../components/AdminUserEmailForm';
 import OGTags from '../../components/OGTags';
+import { addHttpVisit } from '../../utils/monitoring/prometheus';
 
 interface DashboardProps extends SharedSessionData { }
 
@@ -137,6 +138,8 @@ const getButtonsForAllPages = (totalPages: number, currentPage: number, onClick:
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   const sharedSessionData = await getSessionData(req);
+
+  addHttpVisit(req.url ?? "?", req.headers["user-agent"] ?? "?");
 
   return {
     props: { ...sharedSessionData }
