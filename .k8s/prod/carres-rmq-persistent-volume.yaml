@@ -4,6 +4,7 @@ metadata:
   name: rmq-pv
   labels:
     type: local
+  namespace: ""
 spec:
   capacity:
     storage: 1Gi
