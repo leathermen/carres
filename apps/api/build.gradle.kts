@@ -1,6 +1,6 @@
 plugins {
   java
-  id("org.springframework.boot") version "3.0.2"
+  id("org.springframework.boot") version "3.1.2"
   id("io.spring.dependency-management") version "1.1.0"
   id("io.freefair.lombok") version "8.0.1"
 
@@ -12,7 +12,7 @@ group = "com.nikitades"
 
 version = "0.0.1-SNAPSHOT"
 
-java.sourceCompatibility = JavaVersion.VERSION_19
+java.sourceCompatibility = JavaVersion.VERSION_20
 
 repositories { mavenCentral() }
 
@@ -70,7 +70,7 @@ sonarqube {
     property("sonar.coverage.exclusions", "**/*Config.java")
     property("sonar.sources", "src/main/")
     property("sonar.tests", "src/test/")
-    property("sonar.java.source", "19")
+    property("sonar.java.source", "20")
     property("sonar.projectName", "Cars Reservation API")
     property("sonar.host.url", "https://sonarcloud.io")
   }

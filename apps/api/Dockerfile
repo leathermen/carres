@@ -1,4 +1,4 @@
-FROM eclipse-temurin:19 as install-gradle
+FROM eclipse-temurin:20 as install-gradle
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ COPY gradle/ /app/gradle/
 
 RUN /app/gradlew wrapper
 
-FROM eclipse-temurin:19 as builder
+FROM eclipse-temurin:20 as builder
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ COPY --from=install-gradle /root/.gradle /root/.gradle
 
 RUN /app/gradlew bootJar
 
-FROM eclipse-temurin:19 as runner
+FROM eclipse-temurin:20 as runner
 
 WORKDIR /app
 
