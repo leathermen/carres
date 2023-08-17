@@ -80,5 +80,5 @@ spec:
       volumes:
         - name: keycloak-dump
           hostPath:
-            path: /minikube-host/ars/Code/Personal/java/cars-reservation/apps/keycloak/realm.json
+            path: /minikube-host/apps/keycloak/realm.json
             type: File

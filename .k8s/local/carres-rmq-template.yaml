@@ -4,7 +4,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: rmq-rabbitmq
-  namespace: "carres"
+  namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
     helm.sh/chart: rabbitmq-12.0.10
@@ -19,7 +19,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: rmq-rabbitmq-config
-  namespace: "carres"
+  namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
     helm.sh/chart: rabbitmq-12.0.10
@@ -30,12 +30,28 @@ data:
   rabbitmq.conf: |-
     IyMgVXNlcm5hbWUgYW5kIHBhc3N3b3JkCiMjCmRlZmF1bHRfdXNlciA9IHJtcV9hZG1pbgojIyBDbHVzdGVyaW5nCiMjCmNsdXN0ZXJfZm9ybWF0aW9uLnBlZXJfZGlzY292ZXJ5X2JhY2tlbmQgID0gcmFiYml0X3BlZXJfZGlzY292ZXJ5X2s4cwpjbHVzdGVyX2Zvcm1hdGlvbi5rOHMuaG9zdCA9IGt1YmVybmV0ZXMuZGVmYXVsdApjbHVzdGVyX2Zvcm1hdGlvbi5ub2RlX2NsZWFudXAuaW50ZXJ2YWwgPSAxMApjbHVzdGVyX2Zvcm1hdGlvbi5ub2RlX2NsZWFudXAub25seV9sb2dfd2FybmluZyA9IHRydWUKY2x1c3Rlcl9wYXJ0aXRpb25faGFuZGxpbmcgPSBhdXRvaGVhbAoKIyBxdWV1ZSBtYXN0ZXIgbG9jYXRvcgpxdWV1ZV9tYXN0ZXJfbG9jYXRvciA9IG1pbi1tYXN0ZXJzCiMgZW5hYmxlIGxvb3BiYWNrIHVzZXIKbG9vcGJhY2tfdXNlcnMucm1xX2FkbWluID0gZmFsc2UKI2RlZmF1bHRfdmhvc3QgPSBjYXJyZXMtdmhvc3QKI2Rpc2tfZnJlZV9saW1pdC5hYnNvbHV0ZSA9IDUwTUI=
 ---
+# Source: rabbitmq/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rmq-rabbitmq
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: rabbitmq
+    helm.sh/chart: rabbitmq-12.0.10
+    app.kubernetes.io/instance: rmq
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  rabbitmq-password: "ZGV2cm1xdXNlcg=="
+  rabbitmq-erlang-cookie: "d1BMdDdWWVdqcVNBaWpXb3FSTHBMcm9SRFFGd1BPTUs="
+---
 # Source: rabbitmq/templates/role.yaml
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: rmq-rabbitmq-endpoint-reader
-  namespace: "carres"
+  namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
     helm.sh/chart: rabbitmq-12.0.10
@@ -54,7 +70,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: rmq-rabbitmq-endpoint-reader
-  namespace: "carres"
+  namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
     helm.sh/chart: rabbitmq-12.0.10
@@ -73,7 +89,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rmq-rabbitmq-headless
-  namespace: "carres"
+  namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
     helm.sh/chart: rabbitmq-12.0.10
@@ -94,7 +110,7 @@ spec:
     - name: http-stats
       port: 15672
       targetPort: stats
-  selector: 
+  selector:
     app.kubernetes.io/name: rabbitmq
     app.kubernetes.io/instance: rmq
   publishNotReadyAddresses: true
@@ -104,7 +120,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rmq-rabbitmq
-  namespace: "carres"
+  namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
     helm.sh/chart: rabbitmq-12.0.10
@@ -130,7 +146,7 @@ spec:
       port: 15672
       targetPort: stats
       nodePort: null
-  selector: 
+  selector:
     app.kubernetes.io/name: rabbitmq
     app.kubernetes.io/instance: rmq
 ---
@@ -139,7 +155,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: rmq-rabbitmq
-  namespace: "carres"
+  namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
     helm.sh/chart: rabbitmq-12.0.10
@@ -166,11 +182,10 @@ spec:
         checksum/config: 1e6c3a00e9fa83423dc3f47b1971f7056615f100fc55bd6e024fa9b9a5729873
         checksum/secret: 9a59f8c0d251c6ed1f3677ed31cdda1509ac88002ce26ab23066b70757393357
     spec:
-      
       serviceAccountName: rmq-rabbitmq
       affinity:
         podAffinity:
-          
+
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
@@ -181,7 +196,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 1
         nodeAffinity:
-          
+
       securityContext:
         fsGroup: 1001
       terminationGracePeriodSeconds: 120
@@ -315,7 +330,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: rmq-rabbitmq
-  namespace: "carres"
+  namespace: "default"
   labels:
     app.kubernetes.io/name: rabbitmq
     helm.sh/chart: rabbitmq-12.0.10
@@ -324,7 +339,7 @@ metadata:
   annotations:
 spec:
   rules:
-    - host: cars-reservation-rmq.nikitades.com
+    - host: rmq.carres.local
       http:
         paths:
           - path: /

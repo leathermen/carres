@@ -38,9 +38,9 @@ spec:
       volumes:
         - name: postgres-data
           hostPath:
-            path: /minikube-host/ars/Code/Personal/java/cars-reservation/apps/database/files
+            path: /minikube-host/apps/database/files
             type: Directory
         - name: init-script
           hostPath:
-            path: /minikube-host/ars/Code/Personal/java/cars-reservation/apps/database/init.sql
+            path: /minikube-host/apps/database/init.sql
             type: File

@@ -48,3 +48,8 @@ metadata:
 ```
 
 This line enables website app to access the SSO over the external address.
+
+
+# A command to initialize minikube cluster
+
+minikube start --mount-string="$(pwd [or any other sort to specify this repository's root directory]):/minikube-host" --mount --addons=ingress,coredns  
