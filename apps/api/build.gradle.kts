@@ -4,7 +4,7 @@ plugins {
   id("io.spring.dependency-management") version "1.1.0"
   id("io.freefair.lombok") version "8.0.1"
 
-  id("org.sonarqube") version "3.5.0.2730"
+  id("org.sonarqube") version "4.3.0.3225"
   jacoco
 }
 
