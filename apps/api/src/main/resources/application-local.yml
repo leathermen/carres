@@ -16,10 +16,10 @@ spring:
         jwt:
           issuer-uri: http://carres-keycloak:8080/realms/carres
 
-  sql:
-    init:
-      # mode: always
-      # data-locations: classpath:db/seeds/init.sql
+  # sql:
+  #   init:
+  #     mode: always
+  #     data-locations: classpath:db/seeds/init.sql
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

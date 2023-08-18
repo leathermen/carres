@@ -12,6 +12,7 @@ import com.nikitades.carres.application.exception.BadRequestException;
 import com.nikitades.carres.application.exception.NotFoundException;
 import com.nikitades.carres.domain.Car;
 import com.nikitades.carres.domain.CarRepository;
+import com.nikitades.carres.domain.Notifier;
 import com.nikitades.carres.domain.Reservation;
 import com.nikitades.carres.domain.ReservationRepository;
 import com.nikitades.carres.infrastructure.java.JavaUuidProvider;
@@ -42,6 +43,9 @@ class ReservationModuleTest {
   @Mock
   AnalyticsReporter analyticsReporter;
 
+  @Mock
+  Notifier notifier;
+
   UuidProvider uuidProvider = new JavaUuidProvider();
 
   ReservationModule instance;
@@ -49,7 +53,13 @@ class ReservationModuleTest {
   @BeforeEach
   void init() {
     instance =
-      new ReservationModule(reservationRepository, carRepository, uuidProvider, analyticsReporter);
+      new ReservationModule(
+        reservationRepository,
+        carRepository,
+        uuidProvider,
+        analyticsReporter,
+        notifier
+      );
   }
 
   @Test
@@ -60,7 +70,14 @@ class ReservationModuleTest {
     //when new reservation request is made, there's an exception
     assertThrows(
       NotFoundException.class,
-      () -> instance.createReservation(UUID.randomUUID(), UUID.randomUUID(), Instant.now(), 30)
+      () ->
+        instance.createReservation(
+          UUID.randomUUID(),
+          "nikitades@pm.me",
+          UUID.randomUUID(),
+          Instant.now(),
+          30
+        )
     );
   }
 
@@ -73,7 +90,14 @@ class ReservationModuleTest {
     //when a too short duration is passed, there's an exception
     assertThrows(
       BadRequestException.class,
-      () -> instance.createReservation(UUID.randomUUID(), UUID.randomUUID(), Instant.now(), 10)
+      () ->
+        instance.createReservation(
+          UUID.randomUUID(),
+          "nikitades@pm.me",
+          UUID.randomUUID(),
+          Instant.now(),
+          10
+        )
     );
   }
 
@@ -89,6 +113,7 @@ class ReservationModuleTest {
       () ->
         instance.createReservation(
           UUID.randomUUID(),
+          "nikitades@pm.me",
           UUID.randomUUID(),
           Instant.now().plus(Duration.ofMinutes(5)),
           30
@@ -132,6 +157,7 @@ class ReservationModuleTest {
       () -> {
         instance.createReservation(
           UUID.randomUUID(),
+          "nikitades@pm.me",
           UUID.randomUUID(),
           LocalDateTime
             .now()
@@ -154,6 +180,7 @@ class ReservationModuleTest {
     //when a reservation is created
     instance.createReservation(
       UUID.randomUUID(),
+      "nikitades@pm.me",
       UUID.randomUUID(),
       LocalDateTime
         .now()
@@ -167,5 +194,9 @@ class ReservationModuleTest {
     //analytics method is surely called
     verify(analyticsReporter, times(1))
       .addReservationCreated(car.getModel(), car.getManufacturer());
+
+    //notification method is called as well
+    verify(notifier, times(1))
+      .notifyOfNewReservation("nikitades@pm.me", car.getManufacturer(), car.getModel());
   }
 }

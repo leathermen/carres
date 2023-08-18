@@ -35,6 +35,7 @@ public class ReservationController {
   ) {
     Reservation reservation = reservationModule.createReservation(
       UUID.fromString(token.getName()),
+      token.getToken().getClaimAsString("email"),
       request.getVehicleId(),
       request.getStartsAt(),
       request.getDurationMinutes()

@@ -5,6 +5,7 @@ import com.nikitades.carres.application.exception.BadRequestException;
 import com.nikitades.carres.application.exception.NotFoundException;
 import com.nikitades.carres.domain.Car;
 import com.nikitades.carres.domain.CarRepository;
+import com.nikitades.carres.domain.Notifier;
 import com.nikitades.carres.domain.Reservation;
 import com.nikitades.carres.domain.ReservationRepository;
 import com.nikitades.carres.domain.exception.BadReservationDurationException;
@@ -26,6 +27,7 @@ public class ReservationModule {
   private final CarRepository carRepository;
   private final UuidProvider uuidProvider;
   private final AnalyticsReporter analyticsReporter;
+  private final Notifier notifier;
 
   public List<Reservation> getReservations(UUID userId) {
     return reservationRepository.findByOwnerIdOrderByStartsAtDesc(userId);
@@ -33,6 +35,7 @@ public class ReservationModule {
 
   public Reservation createReservation(
     UUID userId,
+    String userEmail,
     UUID vehicleId,
     Instant startTime,
     int durationMinutes
@@ -40,7 +43,7 @@ public class ReservationModule {
     Optional<Car> car = carRepository.findById(vehicleId);
 
     if (!car.isPresent()) {
-      throw new NotFoundException("Car is not found", "NO_CAR_FOUND");
+      throw new NotFoundException("Car is not found", "CAR_NOT_FOUND");
     }
 
     List<Reservation> possiblyOverlappingReservations = reservationRepository.findByCarId(
@@ -71,6 +74,7 @@ public class ReservationModule {
     reservationRepository.save(reservation);
 
     analyticsReporter.addReservationCreated(car.get().getModel(), car.get().getManufacturer());
+    notifier.notifyOfNewReservation(userEmail, car.get().getManufacturer(), car.get().getModel());
 
     return reservation;
   }

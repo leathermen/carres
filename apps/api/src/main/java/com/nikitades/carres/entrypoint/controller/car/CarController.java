@@ -1,5 +1,6 @@
 package com.nikitades.carres.entrypoint.controller.car;
 
+import com.nikitades.carres.application.exception.NotFoundException;
 import com.nikitades.carres.application.reservation.CarModule;
 import com.nikitades.carres.entrypoint.controller.car.dto.CarDto;
 import com.nikitades.carres.entrypoint.controller.car.dto.CarsResponse;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.webjars.NotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/cars")
@@ -27,7 +27,7 @@ public class CarController {
         new CarDto(car.getId(), car.getManufacturer(), car.getModel(), car.getManufacturedAt())
       )
       .findFirst()
-      .orElseThrow(() -> new NotFoundException("Car was not found"));
+      .orElseThrow(() -> new NotFoundException("Car was not found", "CAR_NOT_FOUND"));
   }
 
   @GetMapping("/available")
