@@ -1,0 +1,35 @@
+{
+  "java.compile.nullAnalysis.mode": "automatic",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m",
+  "svelte.enable-ts-plugin": true,
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "java.format.settings.url": "eclipse-formatter.xml",
+  "cSpell.words": ["carres", "Instancio", "Keanu", "Keycloak"],
+  "java.test.config": {
+    "name": "main",
+    "workingDirectory": "${workspaceFolder}",
+    "env": {
+      "SPRING_PROFILES_ACTIVE": "test"
+    }
+  },
+  "java.test.defaultConfig": "main",
+  "files.watcherExclude": {
+    "**/target": true
+  },
+  "java.saveActions.organizeImports": false,
+  "omnisharp.organizeImportsOnFormat": true,
+  "java.debug.settings.onBuildFailureProceed": true,
+  "java.debug.settings.exceptionBreakpoint.skipClasses": [
+    "org.springframework.boot.devtools.*",
+    "$JDK",
+    "junit.*"
+  ]
+}

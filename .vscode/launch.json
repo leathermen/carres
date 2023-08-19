@@ -1,0 +1,46 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "CarresApplication",
+      "request": "launch",
+      "mainClass": "com.nikitades.carres.CarresApplication",
+      "projectName": "api",
+      "env": {
+        "SPRING_PROFILES_ACTIVE": "local,override"
+      },
+      "cwd": "${workspaceFolder}/apps/backend",
+      "stepFilters": {
+        "skipClasses": ["$JDK", "junit.*"],
+        "skipSynthetics": false,
+        "skipStaticInitializers": false,
+        "skipConstructors": false
+      },
+      "console": "internalConsole",
+      "internalConsoleOptions": "openOnFirstSessionStart"
+    },
+    {
+      "type": "java",
+      "name": "TG Notifier",
+      "request": "launch",
+      "mainClass": "com.nikitades.carres.tgnotify.TgnotifyApplication",
+      "projectName": "tg-notifier",
+      "env": {
+        "SPRING_PROFILES_ACTIVE": "local,override"
+      },
+      "cwd": "${workspaceFolder}/apps/backend",
+      "stepFilters": {
+        "skipClasses": ["$JDK", "junit.*"],
+        "skipSynthetics": false,
+        "skipStaticInitializers": false,
+        "skipConstructors": false
+      },
+      "console": "internalConsole",
+      "internalConsoleOptions": "openOnFirstSessionStart"
+    }
+  ]
+}

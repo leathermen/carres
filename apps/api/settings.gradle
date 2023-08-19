@@ -1,3 +1,0 @@
-rootProject.name = 'carres'
-include ':shared'
-project(':shared').projectDir = file("../shared/lib")

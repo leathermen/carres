@@ -1,3 +1,0 @@
-rootProject.name = 'tgnotify'
-include ':shared'
-project(':shared').projectDir = file("../shared/lib")
