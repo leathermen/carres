@@ -54,4 +54,29 @@ class CarControllerTest {
       .andExpect(jsonPath("$.items").exists())
       .andExpect(jsonPath("$.items.length()").value(3));
   }
+
+  @Test
+  @Transactional
+  @WithMockJwt(MockJwt.Nikita)
+  void whenCarIsRequestedById_andCarIsPresentInDb_carIsShown() throws Exception {
+    //Given that some cars exist in the database
+    Car car = Instancio
+      .of(Car.class)
+      .set(field(Car::getCreatedBy), Users.Nikita.getId())
+      .set(field(Car::isAvailable), true)
+      .create();
+
+    carRepository.save(car);
+
+    //when an authorized user requests this car (e.g. at the time of the reservation)
+    var actual = mvc.perform(get("/api/v1/cars/%s".formatted(car.getId())));
+
+    //then the car is displayed in the regular fashion:
+    actual
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.id").value(car.getId().toString()))
+      .andExpect(jsonPath("$.manufacturer").value(car.getManufacturer()))
+      .andExpect(jsonPath("$.model").value(car.getModel()))
+      .andExpect(jsonPath("$.manufacturedAt").value(car.getManufacturedAt().toString()));
+  }
 }

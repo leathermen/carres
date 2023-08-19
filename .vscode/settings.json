@@ -15,7 +15,7 @@
   "cSpell.words": ["carres", "Instancio", "Keanu", "Keycloak"],
   "java.test.config": {
     "name": "main",
-    "workingDirectory": "${workspaceFolder}",
+    "workingDirectory": "${workspaceFolder}/apps/backend",
     "env": {
       "SPRING_PROFILES_ACTIVE": "test"
     }
