@@ -11,6 +11,7 @@ spec:
       app: carres-tgn
   template:
     metadata:
+      creationTimestamp: 2022-05-15T23:33:38Z
       labels:
         app: carres-tgn
     spec:

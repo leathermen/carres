@@ -193,6 +193,12 @@ jobs:
           commitChange: false
       - uses: fjogeleit/yaml-update-action@main
         with:
+          valueFile: .k8s/prod/carres-tgn-deployment.yaml
+          propertyPath: spec.template.metadata.creationTimestamp
+          value: ${{ steps.get-current-time.outputs.CURRENT_TIME }}
+          commitChange: false
+      - uses: fjogeleit/yaml-update-action@main
+        with:
           valueFile: .k8s/prod/carres-website-deployment.yaml
           propertyPath: spec.template.metadata.creationTimestamp
           value: ${{ steps.get-current-time.outputs.CURRENT_TIME }}
