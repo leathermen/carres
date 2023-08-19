@@ -83,7 +83,7 @@ jobs:
           cache-from: type=gha,scope=backend.api
           cache-to: type=gha,mode=max,scope=backend.api
           context: apps/backend
-          file: api.Dockerfile
+          file: apps/backend/api.Dockerfile
           platforms: linux/arm64
 
   build-tgn-image:
@@ -108,7 +108,7 @@ jobs:
           cache-from: type=gha,scope=backend.tgn
           cache-to: type=gha,mode=max,scope=backend.tgn
           context: apps/backend
-          file: api.Dockerfile
+          file: apps/backend/tgn.Dockerfile
           platforms: linux/arm64
 
   build-website-image:
