@@ -7,3 +7,5 @@ data:
   keycloak-base-url: http://carres-keycloak:8080
   keycloak-issuer-url: https://cars-reservation-sso.nikitades.com/realms/carres-prod
   keycloak-realm: carres-prod
+  amqp-host: rmq-rabbitmq
+  amqp-virtual-host: carres
