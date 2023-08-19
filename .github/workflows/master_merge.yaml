@@ -80,8 +80,8 @@ jobs:
           tags: |
             nikitades/carres-api:latest
             nikitades/carres-api:${{ github.sha }}
-          cache-from: type=gha,scope=api
-          cache-to: type=gha,mode=max,scope=api
+          cache-from: type=gha,scope=backend.api
+          cache-to: type=gha,mode=max,scope=backend.api
           file: apps/backend/api.Dockerfile
           platforms: linux/arm64
 
@@ -104,8 +104,8 @@ jobs:
           tags: |
             nikitades/carres-api:latest
             nikitades/carres-api:${{ github.sha }}
-          cache-from: type=gha,scope=api
-          cache-to: type=gha,mode=max,scope=api
+          cache-from: type=gha,scope=backend.tgn
+          cache-to: type=gha,mode=max,scope=backend.tgn
           file: apps/backend/api.Dockerfile
           platforms: linux/arm64
 
