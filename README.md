@@ -4,7 +4,7 @@ This is a test project. It's created to put together all the knowledge I have ab
 
 ## Applications and parts
 
-- [Spring Boot API (readme)](apps/api/README.md)
+- [Spring Boot API (readme)](apps/backend/api/README.md)
 - [React (Next.js) frontend app (readme)](apps/website/README.md)
 - [Keycloak SSO server (readme)](apps/keycloak/README.md)
 - [CloudFlare reverse proxying (readme)](REVERSE-PROXYING.md)
@@ -23,6 +23,10 @@ DDOS mitigation is achieved by hiding the real IP address of the cluster entrypo
 - [API Swagger UI](https://cars-reservation-api.nikitades.com/open/swagger-ui)
 - [**Public Sonarcloud report**](https://sonarcloud.io/summary/new_code?id=leathermen_carres_api) (the coverage included)
 - [TODO public Grafana dashboard of technical and business metrics](somewhere)
+
+## Local launch
+
+This project is supposed to be launched locally with Minikube or any other sort of local K8S cluster.
 
 ## Credits
 
