@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carres-tgn-deployment
+  labels:
+    app: carres-tgn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carres-tgn
+  template:
+    metadata:
+      labels:
+        app: carres-tgn
+    spec:
+      containers:
+        - name: carres-tgn
+          image: nikitades/carres-tgn:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          env:
+            - name: BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: carres-tgn-secret
+                  key: bot-token
+            - name: BOT_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: carres-tgn-secret
+                  key: bot-name
+            - name: BOT_CHAT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: carres-tgn-secret
+                  key: bot-chat-id
+            - name: SPRING_RABBITMQ_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-tgn-config
+                  key: amqp-host
+            - name: SPRING_RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: carres-tgn-secret
+                  key: amqp-username
+            - name: SPRING_RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: carres-tgn-secret
+                  key: amqp-password
+            - name: SPRING_RABBITMQ_VIRTUAL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: carres-tgn-config
+                  key: amqp-virtual-host
+
