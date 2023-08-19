@@ -2,7 +2,7 @@ FROM eclipse-temurin:20 as install-gradle
 
 WORKDIR /app
 
-COPY gradlew /app/
+COPY gradlew settings.gradle /app/
 COPY gradle/ /app/gradle/
 
 RUN /app/gradlew wrapper
@@ -15,14 +15,14 @@ COPY . /app/
 COPY --from=install-gradle /app/.gradle/ /app/.gradle/
 COPY --from=install-gradle /root/.gradle /root/.gradle
 
-RUN /app/gradlew bootJar
+RUN /app/gradlew api:bootJar
 
 FROM eclipse-temurin:20 as runner
 
 WORKDIR /app
 
 COPY --from=builder /app/.gradle /app/
-COPY --from=builder /app/build/libs/carres-*.jar /app/carres.jar
+COPY --from=builder /app/api/build/libs/carres-*.jar /app/carres.jar
 
 EXPOSE 8080/tcp
 
