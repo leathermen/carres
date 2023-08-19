@@ -110,6 +110,9 @@ metadata:
     helm.sh/chart: rabbitmq-12.0.10
     app.kubernetes.io/instance: rmq
     app.kubernetes.io/managed-by: Helm
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "15692"
+    prometheus.io/scrape: "true"
 spec:
   type: ClusterIP
   sessionAffinity: None
