@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: carres-tgn-config
+data:
+  amqp-host: rmq-rabbitmq
+  amqp-virtual-host: carres

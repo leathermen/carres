@@ -24,6 +24,11 @@ spring:
     sql-migration-separator: __
     sql-migration-suffixes: .sql
     locations: classpath:db/migration
+  rabbitmq:
+    host:
+    username:
+    password:
+    virtual-host:
 
 springdoc:
   swagger-ui:

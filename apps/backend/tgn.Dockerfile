@@ -22,10 +22,8 @@ FROM eclipse-temurin:20 as runner
 WORKDIR /app
 
 COPY --from=builder /app/.gradle /app/
-COPY --from=builder /app/tg-notifier/build/libs/carres-*.jar /app/carres.jar
+COPY --from=builder /app/tg-notifier/build/libs/tg-notifier-*.jar /app/app.jar
 
 EXPOSE 8080/tcp
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=2 CMD curl -f http://localhost:8080/actuator/health || exit 1
-
-CMD ["java", "-jar", "/app/carres.jar"]
+CMD ["java", "-jar", "/app/app.jar"]

@@ -1,11 +1,11 @@
-bin
-build
+*/bin
+*/build
 .vscode
 .gradle
 README.md
 .editorconfig
 .gitignore
-Dockerfile
+*.Dockerfile
 gradlew.bat
 .idea
 .fleet
