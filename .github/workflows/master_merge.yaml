@@ -82,7 +82,8 @@ jobs:
             nikitades/carres-api:${{ github.sha }}
           cache-from: type=gha,scope=backend.api
           cache-to: type=gha,mode=max,scope=backend.api
-          file: apps/backend/api.Dockerfile
+          context: apps/backend
+          file: api.Dockerfile
           platforms: linux/arm64
 
   build-tgn-image:
@@ -106,7 +107,8 @@ jobs:
             nikitades/carres-api:${{ github.sha }}
           cache-from: type=gha,scope=backend.tgn
           cache-to: type=gha,mode=max,scope=backend.tgn
-          file: apps/backend/api.Dockerfile
+          context: apps/backend
+          file: api.Dockerfile
           platforms: linux/arm64
 
   build-website-image:
