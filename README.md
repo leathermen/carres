@@ -46,6 +46,14 @@ password: example15
   </tr>
 </table>
 
+## Diagram
+
+Services are located in the K8S cluster and exposed over Traefik ingresses.
+
+<p align="center">
+  <img src="apps/website/public/images/diagram.png" width=80%>
+</p>
+
 ## Ideas
 
 This whole project is supposed to visualize the idea of a great web application. The API is covered with tests thoroughly, both in unit and integration style. The domain area of the app is rather simple, so it takes no Ubiquitous Language to describe. Also, DDD techniques were intentionally not used to speed up the development and also out of lack of reason to use ones: the project is small, as I already said.

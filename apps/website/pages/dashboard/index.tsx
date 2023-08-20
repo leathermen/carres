@@ -11,6 +11,7 @@ import { getUsersReservations, cancelReservation as cancelReservationApi } from 
 import AdminUserEmailForm from '../../components/AdminUserEmailForm';
 import OGTags from '../../components/OGTags';
 import { addAvailableForReservationPageVisit, addHttpVisit } from '../../utils/monitoring/prometheus';
+import Footer from '../../components/Footer';
 
 interface DashboardProps extends SharedSessionData { }
 
