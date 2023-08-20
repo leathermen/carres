@@ -61,7 +61,7 @@ This whole project is supposed to visualize the idea of a great web application.
 ## Visual metrics and materials
 
 - [API Swagger UI](https://cars-reservation-api.nikitades.com/open/swagger-ui)
-- [**Public Sonarcloud report**](https://sonarcloud.io/summary/new_code?id=leathermen_carres_api) (the coverage included)
+- [**Public Sonarcloud report**](https://sonarcloud.io/summary/overall?id=leathermen_carres_api) (the coverage included)
 - [Grafana dashboards (examples)](MONITORING.md)
 
 ## General technical specification
@@ -82,7 +82,7 @@ Please see more in root folders of every particular application.
 - Keycloak (SSO service)
 - Rabbit MQ (AMQP bus)
 - Kubernetes (orchestration)
-- Prometheus (metrics scraping)p
+- Prometheus (metrics scraping)
 - Grafana (metrics visualization)
 - CloudFlare (reverse proxying and DDOS mitigation)
 - SonarCloud (code quality gate)
