@@ -62,7 +62,7 @@ This whole project is supposed to visualize the idea of a great web application.
 
 - [API Swagger UI](https://cars-reservation-api.nikitades.com/open/swagger-ui)
 - [**Public Sonarcloud report**](https://sonarcloud.io/summary/new_code?id=leathermen_carres_api) (the coverage included)
-- [TODO public Grafana dashboard of technical and business metrics](somewhere)
+- [Grafana dashboards (examples)](MONITORING.md)
 
 ## General technical specification
 
