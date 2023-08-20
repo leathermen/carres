@@ -10,6 +10,7 @@ import { SharedSessionData, getSessionData } from '../../utils/session/getShared
 import CarReservationForm from './CarReservationForm';
 import OGTags from '../../components/OGTags';
 import { addHttpVisit } from '../../utils/monitoring/prometheus';
+import Footer from '../../components/Footer';
 
 interface CarReservationPageProps extends SharedSessionData { }
 
@@ -67,6 +68,7 @@ export default function CarReservationPage({ idToken, isManager, needsReservatio
           )}
         </div>
       </main>
+      <Footer />
     </Container>
   </>;
 }

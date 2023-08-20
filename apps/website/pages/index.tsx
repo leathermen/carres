@@ -5,12 +5,13 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Header from '../components/Header';
+import OGTags from '../components/OGTags';
 import ReservationListElement from '../components/ReservationListElement';
 import { getReservations } from '../utils/client';
 import Reservation from '../utils/client/types/Reservation';
-import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
-import OGTags from '../components/OGTags';
 import { addHttpVisit, addMainPageVisit } from '../utils/monitoring/prometheus';
+import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
+import Footer from '../components/Footer';
 
 const RESERVATION_COOKIE_NAME = "i_need_reservations";
 
@@ -92,6 +93,7 @@ export default function Home({ needsReservations: needsReservationsServerSide, i
             </div>
           )}
         </main>
+        <Footer />
       </Container>
     </>
   )

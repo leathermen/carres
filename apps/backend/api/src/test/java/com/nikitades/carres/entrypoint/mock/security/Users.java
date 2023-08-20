@@ -26,7 +26,7 @@ public class Users {
     UUID.fromString("74e2d42e-7e55-4119-8208-947c06cfe987"),
     "Chuck",
     "Norris",
-    "chuck.norris@fromjimmy.com",
+    "chuck.norris@nikitades.com",
     List.of(JwtRole.Manager),
     "VIOLENCE_IS_MY_LAST_OPTION",
     List.of("openid", "profile", "email")
@@ -36,7 +36,7 @@ public class Users {
     UUID.fromString("b020740b-ea79-447e-acb9-28c539cca909"),
     "Keanu",
     "Reeves",
-    "keanu.reeves@fromjimmy.com",
+    "keanu.reeves@nikitades.com",
     List.of(),
     "I_KNOW_KUNG_FU",
     List.of("openid", "profile", "email")
@@ -49,7 +49,7 @@ public class Users {
     UUID.fromString("903df77b-f156-4fcc-bf2e-907b20b05e36"),
     "Thomas",
     "Felton",
-    "thomas.felton@fromjimmy.com",
+    "thomas.felton@nikitades.com",
     List.of(),
     "ILL_TELL_MY_FATHER",
     List.of("openid", "profile", "email")

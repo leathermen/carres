@@ -1,4 +1,15 @@
-# A word of warning
+# Launching the project locally
+
+
+## 1. A command to initialize minikube cluster
+
+```bash
+minikube start --mount-string="$(pwd):/minikube-host" --mount --addons=ingress,coredns
+```
+
+Execute in the root of the project. (pwd = repo root)
+
+## 2. DNS hack
 
 There's an issue in Nextauth library. It currently does not support separate backend and frontend SSO urls:
 https://github.com/nextauthjs/next-auth/issues/2637
@@ -49,7 +60,24 @@ metadata:
 
 This line enables website app to access the SSO over the external address.
 
+## 3. /etc/hosts records
 
-# A command to initialize minikube cluster
+Put the following lines to the bottom of `/etc/hosts` file:
 
-minikube start --mount-string="$(pwd [or any other sort to specify this repository's root directory]):/minikube-host" --mount --addons=ingress,coredns  
+```hosts
+127.0.0.1	host.minikube.internal
+127.0.0.1	carres.local
+127.0.0.1	api.carres.local
+127.0.0.1	sso.carres.local
+127.0.0.1	rmq.carres.local
+```
+
+This would enable the browser to access the whole ecosystem locally.
+
+## 4. Apply Kubernetes configs:
+
+```bash
+kubectl apply -f .k8s/local/carres-\*.yaml
+```
+
+It takes about 1 minute for the project to start due to Keycloak initialization.

@@ -116,6 +116,7 @@ export default function Dashboard({ needsReservations, idToken, isManager }: Das
             </div>
           </main>
         )}
+        <Footer />
       </Container>
     </>
   );

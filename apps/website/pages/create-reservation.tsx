@@ -10,6 +10,7 @@ import Car from '../utils/client/types/Car';
 import { SharedSessionData, getSessionData } from '../utils/session/getSharedSessionData';
 import OGTags from '../components/OGTags';
 import { addAvailableForReservationPageVisit, addHttpVisit } from '../utils/monitoring/prometheus';
+import Footer from '../components/Footer';
 
 interface NewReservationScreenProps extends SharedSessionData { }
 
@@ -63,6 +64,7 @@ export default function NewReservationScreen({ isManager, idToken, needsReservat
             </div>
           </div>
         </main>
+        <Footer />
       </Container>
     </>
   );
