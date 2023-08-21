@@ -4,18 +4,23 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig {
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc)
+    throws Exception {
     http
       .cors()
       .and()
@@ -29,21 +34,29 @@ public class WebSecurityConfig {
         requests
           .requestMatchers(antMatcher("/h2-console/**"))
           .permitAll()
-          .requestMatchers("/api/*/dashboard/**")
+          .requestMatchers(mvc.pattern("/api/*/dashboard/**"))
           .hasAnyAuthority("manager")
-          .requestMatchers("/open/**", "/api/*/open/**", "/v3/api-docs/**")
+          .requestMatchers(
+            mvc.pattern("/open/**"),
+            mvc.pattern("/api/*/open/**"),
+            mvc.pattern("/v3/api-docs/**")
+          )
           .permitAll()
-          .requestMatchers("/actuator/health")
+          .requestMatchers(mvc.pattern("/actuator/health"))
           .permitAll()
-          .requestMatchers("/actuator/prometheus")
+          .requestMatchers(mvc.pattern("/actuator/prometheus"))
           .hasAnyAuthority("metrics-scraper");
         requests.anyRequest().authenticated();
       })
-      .oauth2ResourceServer(oauth2 ->
-        oauth2.jwt().jwtAuthenticationConverter(authenticationConverter())
-      );
+      .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 
     return http.build();
+  }
+
+  @Scope("prototype")
+  @Bean
+  MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+    return new MvcRequestMatcher.Builder(introspector);
   }
 
   protected JwtAuthenticationConverter authenticationConverter() {
