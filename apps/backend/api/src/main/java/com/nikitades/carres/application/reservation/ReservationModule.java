@@ -8,6 +8,7 @@ import com.nikitades.carres.domain.CarRepository;
 import com.nikitades.carres.domain.Notifier;
 import com.nikitades.carres.domain.Reservation;
 import com.nikitades.carres.domain.ReservationRepository;
+import com.nikitades.carres.domain.TimeProvider;
 import com.nikitades.carres.domain.exception.BadReservationDurationException;
 import com.nikitades.carres.domain.exception.CannotReserveVehicleForTooSoonException;
 import com.nikitades.carres.domain.exception.ReservationOverlapsWithAnotherOneException;
@@ -26,6 +27,7 @@ public class ReservationModule {
   private final ReservationRepository reservationRepository;
   private final CarRepository carRepository;
   private final UuidProvider uuidProvider;
+  private final TimeProvider timeProvider;
   private final AnalyticsReporter analyticsReporter;
   private final Notifier notifier;
 
@@ -61,7 +63,8 @@ public class ReservationModule {
           car.get(),
           startTime,
           durationMinutes,
-          startTime
+          startTime,
+          timeProvider.utcNow()
         );
     } catch (BadReservationDurationException e) {
       throw new BadRequestException(e.getMessage(), "BAD_RESERVATION_DURATION");

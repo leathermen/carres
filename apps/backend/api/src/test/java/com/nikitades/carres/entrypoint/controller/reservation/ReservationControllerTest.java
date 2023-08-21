@@ -11,6 +11,7 @@ import com.nikitades.carres.domain.CarRepository;
 import com.nikitades.carres.domain.Notifier;
 import com.nikitades.carres.domain.Reservation;
 import com.nikitades.carres.domain.ReservationRepository;
+import com.nikitades.carres.domain.TimeProvider;
 import com.nikitades.carres.entrypoint.controller.reservation.dto.CreateReservationRequest;
 import com.nikitades.carres.entrypoint.mock.security.MockJwt;
 import com.nikitades.carres.entrypoint.mock.security.Users;
@@ -18,6 +19,7 @@ import com.nikitades.carres.entrypoint.mock.security.WithMockJwt;
 import jakarta.transaction.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import org.instancio.Instancio;
 import org.instancio.Model;
@@ -48,6 +50,9 @@ class ReservationControllerTest {
 
   @MockBean
   private Notifier notifier;
+
+  @Autowired
+  private TimeProvider timeProvider;
 
   @Test
   @Transactional
@@ -96,12 +101,13 @@ class ReservationControllerTest {
     //when someone authorized posts the new reservation request
     String body = objectMapper.writeValueAsString(
       new CreateReservationRequest(
-        LocalDateTime
-          .now()
+        timeProvider
+          .utcNow()
+          .atZone(ZoneId.of("UTC"))
           .plus(Duration.ofDays(1))
           .withHour(15)
           .withMinute(30)
-          .toInstant(ZoneOffset.UTC),
+          .toInstant(),
         30,
         car.getId()
       )

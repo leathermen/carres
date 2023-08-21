@@ -15,12 +15,16 @@ import com.nikitades.carres.domain.CarRepository;
 import com.nikitades.carres.domain.Notifier;
 import com.nikitades.carres.domain.Reservation;
 import com.nikitades.carres.domain.ReservationRepository;
+import com.nikitades.carres.domain.TimeProvider;
+import com.nikitades.carres.infrastructure.java.JavaTimeProvider;
 import com.nikitades.carres.infrastructure.java.JavaUuidProvider;
 import com.nikitades.carres.infrastructure.prometheus.AnalyticsReporter;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,6 +52,8 @@ class ReservationModuleTest {
 
   UuidProvider uuidProvider = new JavaUuidProvider();
 
+  TimeProvider timeProvider = new JavaTimeProvider();
+
   ReservationModule instance;
 
   @BeforeEach
@@ -57,6 +63,7 @@ class ReservationModuleTest {
         reservationRepository,
         carRepository,
         uuidProvider,
+        timeProvider,
         analyticsReporter,
         notifier
       );
@@ -75,7 +82,7 @@ class ReservationModuleTest {
           UUID.randomUUID(),
           "nikitades@pm.me",
           UUID.randomUUID(),
-          Instant.now(),
+          timeProvider.utcNow(),
           30
         )
     );
@@ -95,7 +102,7 @@ class ReservationModuleTest {
           UUID.randomUUID(),
           "nikitades@pm.me",
           UUID.randomUUID(),
-          Instant.now(),
+          timeProvider.utcNow(),
           10
         )
     );
@@ -115,7 +122,7 @@ class ReservationModuleTest {
           UUID.randomUUID(),
           "nikitades@pm.me",
           UUID.randomUUID(),
-          Instant.now().plus(Duration.ofMinutes(5)),
+          timeProvider.utcNow().plus(Duration.ofMinutes(5)),
           30
         )
     );
@@ -132,21 +139,23 @@ class ReservationModuleTest {
       .of(Reservation.class)
       .set(
         field(Reservation::getStartsAt),
-        LocalDateTime
-          .now()
+        timeProvider
+          .utcNow()
+          .atZone(ZoneId.of("UTC"))
           .plus(Duration.ofDays(1))
           .withHour(15)
           .withMinute(0)
-          .toInstant(ZoneOffset.UTC)
+          .toInstant()
       )
       .set(
         field(Reservation::getEndsAt),
-        LocalDateTime
-          .now()
+        timeProvider
+          .utcNow()
+          .atZone(ZoneId.of("UTC"))
           .plus(Duration.ofDays(1))
           .withHour(15)
           .withMinute(30)
-          .toInstant(ZoneOffset.UTC)
+          .toInstant()
       )
       .create();
     when(reservationRepository.findByCarId(any(UUID.class))).thenReturn(List.of(reservation1));
@@ -159,12 +168,13 @@ class ReservationModuleTest {
           UUID.randomUUID(),
           "nikitades@pm.me",
           UUID.randomUUID(),
-          LocalDateTime
-            .now()
+          timeProvider
+            .utcNow()
+            .atZone(ZoneId.of("UTC"))
             .plus(Duration.ofDays(1))
             .withHour(15)
             .withMinute(15)
-            .toInstant(ZoneOffset.UTC),
+            .toInstant(),
           15
         );
       }
@@ -182,12 +192,13 @@ class ReservationModuleTest {
       UUID.randomUUID(),
       "nikitades@pm.me",
       UUID.randomUUID(),
-      LocalDateTime
-        .now()
+      timeProvider
+        .utcNow()
+        .atZone(ZoneId.of("UTC"))
         .plus(Duration.ofDays(1))
         .withHour(15)
         .withMinute(15)
-        .toInstant(ZoneOffset.UTC),
+        .toInstant(),
       15
     );
 

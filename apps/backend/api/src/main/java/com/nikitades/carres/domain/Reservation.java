@@ -51,7 +51,8 @@ public class Reservation {
     Car car,
     Instant startsAt,
     int durationMinutes,
-    Instant createdAt
+    Instant createdAt,
+    Instant now
   )
     throws BadReservationDurationException, ReservationOverlapsWithAnotherOneException, CannotReserveVehicleForTooSoonException {
     Reservation newReservation = new Reservation(
@@ -63,7 +64,7 @@ public class Reservation {
       createdAt
     );
 
-    if (startsAt.isBefore(Instant.now().plus(Duration.ofHours(1)))) {
+    if (startsAt.isBefore(now.plus(Duration.ofHours(1)))) {
       throw new CannotReserveVehicleForTooSoonException(
         "New reservation must be at least in 1 hour from now"
       );

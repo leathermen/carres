@@ -7,16 +7,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.nikitades.carres.domain.exception.BadReservationDurationException;
 import com.nikitades.carres.domain.exception.ReservationOverlapsWithAnotherOneException;
+import com.nikitades.carres.infrastructure.java.JavaTimeProvider;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Test;
 
 class ReservationTest {
+
+  private TimeProvider timeProvider = new JavaTimeProvider();
 
   @Test
   void whenReservationIsCreatedForLessThan15Minutes_thenExceptionIsThrown() {
@@ -34,9 +39,10 @@ class ReservationTest {
           UUID.randomUUID(),
           UUID.randomUUID(),
           car,
-          Instant.now().plus(Duration.ofDays(5)),
+          timeProvider.utcNow().plus(Duration.ofDays(5)),
           timeDurationMinutes,
-          Instant.now()
+          timeProvider.utcNow(),
+          timeProvider.utcNow()
         )
     );
   }
@@ -55,9 +61,10 @@ class ReservationTest {
         UUID.randomUUID(),
         UUID.randomUUID(),
         car,
-        Instant.now().plus(Duration.ofDays(5)),
+        timeProvider.utcNow().plus(Duration.ofDays(5)),
         timeDurationMinutes,
-        Instant.now()
+        timeProvider.utcNow(),
+        timeProvider.utcNow()
       )
     );
 
@@ -67,11 +74,12 @@ class ReservationTest {
   @Test
   void whenReservationExactlyOverlapsWithAnotherOne_thenExceptionIsThrown() {
     //Given that the time is current day at the noon
-    Instant concurrentReservationTime = LocalDateTime
-      .now()
+    Instant concurrentReservationTime = timeProvider
+      .utcNow()
+      .atZone(ZoneId.of("UTC"))
       .plus(Duration.ofDays(1))
       .withHour(12)
-      .toInstant(ZoneOffset.UTC);
+      .toInstant();
 
     //And that there is the reservation for that
     Reservation dummyReservation = Instancio
@@ -94,7 +102,8 @@ class ReservationTest {
           car,
           concurrentReservationTime,
           30,
-          Instant.now()
+          timeProvider.utcNow(),
+          timeProvider.utcNow()
         )
     );
   }
@@ -102,19 +111,21 @@ class ReservationTest {
   @Test
   void whenReservationStartTimeOverlapsWithAnotherReservationSpan_thenExceptionIsThrown() {
     //Given that there is a reservation that lasts for 45 minutes from 14:00 till 14:45
-    Instant concurrentReservationStartTime = LocalDateTime
-      .now()
+    Instant concurrentReservationStartTime = timeProvider
+      .utcNow()
+      .atZone(ZoneId.of("UTC"))
       .plus(Duration.ofDays(1))
       .withHour(14)
       .withMinute(0)
-      .toInstant(ZoneOffset.UTC);
+      .toInstant();
 
-    Instant concurrentReservationEndTime = LocalDateTime
-      .now()
+    Instant concurrentReservationEndTime = timeProvider
+      .utcNow()
+      .atZone(ZoneId.of("UTC"))
       .plus(Duration.ofDays(1))
       .withHour(14)
       .withMinute(45)
-      .toInstant(ZoneOffset.UTC);
+      .toInstant();
 
     //And that there is the reservation for that
     Reservation dummyReservation = Instancio
@@ -128,12 +139,13 @@ class ReservationTest {
 
     //so when a new reservation is created for exactly a span that starts within the used time, there's an exception
 
-    Instant newReservationStartTime = LocalDateTime
-      .now()
+    Instant newReservationStartTime = timeProvider
+      .utcNow()
+      .atZone(ZoneId.of("UTC"))
       .plus(Duration.ofDays(1))
       .withHour(14)
       .withMinute(30)
-      .toInstant(ZoneOffset.UTC);
+      .toInstant();
 
     assertThrows(
       ReservationOverlapsWithAnotherOneException.class,
@@ -145,7 +157,8 @@ class ReservationTest {
           car,
           newReservationStartTime,
           30,
-          Instant.now()
+          timeProvider.utcNow(),
+          timeProvider.utcNow()
         )
     );
   }
@@ -153,19 +166,21 @@ class ReservationTest {
   @Test
   void whenReservationEndTimeOverlapsWithAnotherReservationSpan_thenExceptionIsThrown() {
     //Given that there is a reservation that lasts for 45 minutes from 14:00 till 14:45
-    Instant concurrentReservationStartTime = LocalDateTime
-      .now()
+    Instant concurrentReservationStartTime = timeProvider
+      .utcNow()
+      .atZone(ZoneId.of("UTC"))
       .plus(Duration.ofDays(1))
       .withHour(14)
       .withMinute(0)
-      .toInstant(ZoneOffset.UTC);
+      .toInstant();
 
-    Instant concurrentReservationEndTime = LocalDateTime
-      .now()
+    Instant concurrentReservationEndTime = timeProvider
+      .utcNow()
+      .atZone(ZoneId.of("UTC"))
       .plus(Duration.ofDays(1))
       .withHour(14)
       .withMinute(45)
-      .toInstant(ZoneOffset.UTC);
+      .toInstant();
 
     //And that there is the reservation for that
     Reservation dummyReservation = Instancio
@@ -178,12 +193,13 @@ class ReservationTest {
     Car car = Instancio.of(Car.class).create();
 
     //so when a new reservation is created for exactly a span that ends within the used time, there's an exception
-    Instant newReservationStartTime = LocalDateTime
-      .now()
+    Instant newReservationStartTime = timeProvider
+      .utcNow()
+      .atZone(ZoneId.of("UTC"))
       .plus(Duration.ofDays(1))
       .withHour(13)
       .withMinute(45)
-      .toInstant(ZoneOffset.UTC);
+      .toInstant();
 
     assertThrows(
       ReservationOverlapsWithAnotherOneException.class,
@@ -195,7 +211,8 @@ class ReservationTest {
           car,
           newReservationStartTime,
           45,
-          Instant.now()
+          timeProvider.utcNow(),
+          timeProvider.utcNow()
         )
     );
   }
@@ -203,15 +220,9 @@ class ReservationTest {
   @Test
   void whenReservationDoesNotOverlapWithAnotherOne_thenNoExceptions() {
     //Given that the times of reservation are different
-    LocalDateTime now = LocalDateTime.now();
-    Instant time1 = LocalDateTime
-      .of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 12, 0, 0)
-      .toInstant(ZoneOffset.UTC);
-
-    Instant time2 = LocalDateTime
-      .of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 16, 0, 0)
-      .toInstant(ZoneOffset.UTC)
-      .plus(Duration.ofDays(1));
+    ZonedDateTime now = timeProvider.utcNow().atZone(ZoneId.of("UTC"));
+    Instant time1 = now.withHour(12).toInstant();
+    Instant time2 = now.withHour(16).toInstant().plus(Duration.ofDays(1));
 
     //And that there is the reservation for the first time
     Reservation dummyReservation = Instancio
@@ -232,7 +243,8 @@ class ReservationTest {
         car,
         time2,
         30,
-        Instant.now()
+        timeProvider.utcNow(),
+        timeProvider.utcNow()
       )
     );
   }
