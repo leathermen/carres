@@ -22,14 +22,8 @@ public class WebSecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc)
     throws Exception {
     http
-      .cors()
-      .and()
-      .csrf()
-      .disable()
-      .headers()
-      .frameOptions()
-      .disable()
-      .and()
+      .cors(Customizer.withDefaults())
+      .csrf(csrf -> csrf.disable())
       .authorizeHttpRequests(requests -> {
         requests
           .requestMatchers(antMatcher("/h2-console/**"))
