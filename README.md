@@ -6,8 +6,8 @@
   </a>
 </p>
 
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/leathermen/carres/master_merge.yaml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=leathermen_carres_api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=leathermen_carres_api) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=leathermen_carres_api&metric=coverage)](https://sonarcloud.io/summary/new_code?id=leathermen_carres_api) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=leathermen_carres_api&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=leathermen_carres_api)
+[![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/leathermen/carres/master_merge.yaml)](https://github.com/leathermen/carres/actions)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=leathermen_carres_api&metric=alert_status)](https://sonarcloud.io/summary/overall?id=leathermen_carres_api) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=leathermen_carres_api&metric=coverage)](https://sonarcloud.io/summary/new_code?id=leathermen_carres_api) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=leathermen_carres_api&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=leathermen_carres_api)
 
 </p>
 
