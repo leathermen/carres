@@ -612,9 +612,9 @@
     "otpPolicyPeriod": 30,
     "otpPolicyCodeReusable": false,
     "otpSupportedApplications": [
-      "totpAppGoogleName",
       "totpAppFreeOTPName",
-      "totpAppMicrosoftAuthenticatorName"
+      "totpAppMicrosoftAuthenticatorName",
+      "totpAppGoogleName"
     ],
     "webAuthnPolicyRpEntityName": "keycloak",
     "webAuthnPolicySignatureAlgorithms": ["ES256"],
@@ -1450,6 +1450,7 @@
     "browserSecurityHeaders": {
       "contentSecurityPolicyReportOnly": "",
       "xContentTypeOptions": "nosniff",
+      "referrerPolicy": "no-referrer",
       "xRobotsTag": "none",
       "xFrameOptions": "SAMEORIGIN",
       "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
@@ -1458,7 +1459,7 @@
     },
     "smtpServer": {},
     "loginTheme": "keycloak",
-    "accountTheme": "keycloak",
+    "accountTheme": "keycloak.v2",
     "adminTheme": "keycloak.v2",
     "emailTheme": "keycloak",
     "eventsEnabled": false,
@@ -1507,13 +1508,13 @@
           "subComponents": {},
           "config": {
             "allowed-protocol-mapper-types": [
-              "oidc-address-mapper",
               "saml-user-property-mapper",
-              "oidc-full-name-mapper",
               "saml-role-list-mapper",
+              "oidc-address-mapper",
               "saml-user-attribute-mapper",
               "oidc-sha256-pairwise-sub-mapper",
               "oidc-usermodel-attribute-mapper",
+              "oidc-full-name-mapper",
               "oidc-usermodel-property-mapper"
             ]
           }
@@ -1527,11 +1528,11 @@
           "config": {
             "allowed-protocol-mapper-types": [
               "oidc-sha256-pairwise-sub-mapper",
-              "saml-user-attribute-mapper",
-              "oidc-address-mapper",
-              "saml-role-list-mapper",
-              "oidc-usermodel-property-mapper",
               "saml-user-property-mapper",
+              "saml-role-list-mapper",
+              "oidc-address-mapper",
+              "saml-user-attribute-mapper",
+              "oidc-usermodel-property-mapper",
               "oidc-usermodel-attribute-mapper",
               "oidc-full-name-mapper"
             ]
@@ -1660,40 +1661,6 @@
             "priority": 20,
             "autheticatorFlow": true,
             "flowAlias": "Verify Existing Account by Re-authentication",
-            "userSetupAllowed": false
-          }
-        ]
-      },
-      {
-        "id": "4d3cd2c2-3c42-47d7-85c9-17c66371c7ad",
-        "alias": "Authentication Options",
-        "description": "Authentication options.",
-        "providerId": "basic-flow",
-        "topLevel": false,
-        "builtIn": true,
-        "authenticationExecutions": [
-          {
-            "authenticator": "basic-auth",
-            "authenticatorFlow": false,
-            "requirement": "REQUIRED",
-            "priority": 10,
-            "autheticatorFlow": false,
-            "userSetupAllowed": false
-          },
-          {
-            "authenticator": "basic-auth-otp",
-            "authenticatorFlow": false,
-            "requirement": "DISABLED",
-            "priority": 20,
-            "autheticatorFlow": false,
-            "userSetupAllowed": false
-          },
-          {
-            "authenticator": "auth-spnego",
-            "authenticatorFlow": false,
-            "requirement": "DISABLED",
-            "priority": 30,
-            "autheticatorFlow": false,
             "userSetupAllowed": false
           }
         ]
@@ -2071,32 +2038,6 @@
         ]
       },
       {
-        "id": "ae93d9d2-111b-478c-aef2-3f1c41ef7346",
-        "alias": "http challenge",
-        "description": "An authentication flow based on challenge-response HTTP Authentication Schemes",
-        "providerId": "basic-flow",
-        "topLevel": true,
-        "builtIn": true,
-        "authenticationExecutions": [
-          {
-            "authenticator": "no-cookie-redirect",
-            "authenticatorFlow": false,
-            "requirement": "REQUIRED",
-            "priority": 10,
-            "autheticatorFlow": false,
-            "userSetupAllowed": false
-          },
-          {
-            "authenticatorFlow": true,
-            "requirement": "REQUIRED",
-            "priority": 20,
-            "autheticatorFlow": true,
-            "flowAlias": "Authentication Options",
-            "userSetupAllowed": false
-          }
-        ]
-      },
-      {
         "id": "0c5f8c0e-bc5e-4799-80da-b9762b8b5f50",
         "alias": "registration",
         "description": "registration flow",
@@ -2245,9 +2186,9 @@
         "config": {}
       },
       {
-        "alias": "terms_and_conditions",
+        "alias": "TERMS_AND_CONDITIONS",
         "name": "Terms and Conditions",
-        "providerId": "terms_and_conditions",
+        "providerId": "TERMS_AND_CONDITIONS",
         "enabled": false,
         "defaultAction": false,
         "priority": 20,
@@ -2337,7 +2278,7 @@
       "cibaInterval": "5",
       "realmReusableOtpCode": "false"
     },
-    "keycloakVersion": "21.0.1",
+    "keycloakVersion": "22.0.3",
     "userManagedAccessAllowed": false,
     "clientProfiles": {
       "profiles": []
@@ -2765,9 +2706,9 @@
     "otpPolicyPeriod": 30,
     "otpPolicyCodeReusable": false,
     "otpSupportedApplications": [
-      "totpAppGoogleName",
       "totpAppFreeOTPName",
-      "totpAppMicrosoftAuthenticatorName"
+      "totpAppMicrosoftAuthenticatorName",
+      "totpAppGoogleName"
     ],
     "webAuthnPolicyRpEntityName": "keycloak",
     "webAuthnPolicySignatureAlgorithms": ["ES256"],
@@ -2811,6 +2752,13 @@
         ],
         "disableableCredentialTypes": [],
         "requiredActions": [],
+        "federatedIdentities": [
+          {
+            "identityProvider": "github",
+            "userId": "6214912",
+            "userName": "nikitades"
+          }
+        ],
         "realmRoles": ["default-roles-carres", "manager"],
         "notBefore": 0,
         "groups": []
@@ -3019,6 +2967,7 @@
             "consentRequired": false,
             "config": {
               "user.session.note": "clientId",
+              "userinfo.token.claim": "true",
               "id.token.claim": "true",
               "access.token.claim": "true",
               "claim.name": "clientId",
@@ -3033,6 +2982,7 @@
             "consentRequired": false,
             "config": {
               "user.session.note": "clientHost",
+              "userinfo.token.claim": "true",
               "id.token.claim": "true",
               "access.token.claim": "true",
               "claim.name": "clientHost",
@@ -3048,7 +2998,8 @@
             "config": {
               "included.client.audience": "app",
               "id.token.claim": "true",
-              "access.token.claim": "true"
+              "access.token.claim": "true",
+              "userinfo.token.claim": "true"
             }
           },
           {
@@ -3059,6 +3010,7 @@
             "consentRequired": false,
             "config": {
               "user.session.note": "clientAddress",
+              "userinfo.token.claim": "true",
               "id.token.claim": "true",
               "access.token.claim": "true",
               "claim.name": "clientAddress",
@@ -3706,6 +3658,7 @@
     "browserSecurityHeaders": {
       "contentSecurityPolicyReportOnly": "",
       "xContentTypeOptions": "nosniff",
+      "referrerPolicy": "no-referrer",
       "xRobotsTag": "none",
       "xFrameOptions": "SAMEORIGIN",
       "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
@@ -3714,7 +3667,7 @@
     },
     "smtpServer": {},
     "loginTheme": "keycloak",
-    "accountTheme": "keycloak",
+    "accountTheme": "keycloak.v2",
     "adminTheme": "keycloak.v2",
     "emailTheme": "keycloak",
     "eventsEnabled": false,
@@ -3722,7 +3675,30 @@
     "enabledEventTypes": [],
     "adminEventsEnabled": false,
     "adminEventsDetailsEnabled": false,
-    "identityProviders": [],
+    "identityProviders": [
+      {
+        "alias": "github",
+        "internalId": "f4c98cd0-cb9a-4428-9131-a62c2189f2c8",
+        "providerId": "github",
+        "enabled": true,
+        "updateProfileFirstLoginMode": "on",
+        "trustEmail": true,
+        "storeToken": false,
+        "addReadTokenRoleOnCreate": false,
+        "authenticateByDefault": false,
+        "linkOnly": false,
+        "firstBrokerLoginFlowAlias": "first broker login",
+        "config": {
+          "hideOnLoginPage": "false",
+          "acceptsPromptNoneForwardFromClient": "true",
+          "clientId": "1aceada9a1350fe931f6",
+          "disableUserInfo": "false",
+          "filteredByClaim": "false",
+          "syncMode": "IMPORT",
+          "clientSecret": "491bfb6bbc987c20b792e3f1ed2a5d072a6b9231"
+        }
+      }
+    ],
     "identityProviderMappers": [],
     "components": {
       "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy": [
@@ -3783,14 +3759,14 @@
           "subComponents": {},
           "config": {
             "allowed-protocol-mapper-types": [
-              "oidc-sha256-pairwise-sub-mapper",
-              "oidc-usermodel-property-mapper",
               "oidc-full-name-mapper",
-              "oidc-address-mapper",
-              "oidc-usermodel-attribute-mapper",
+              "oidc-usermodel-property-mapper",
               "saml-user-property-mapper",
+              "oidc-usermodel-attribute-mapper",
+              "saml-role-list-mapper",
+              "oidc-sha256-pairwise-sub-mapper",
               "saml-user-attribute-mapper",
-              "saml-role-list-mapper"
+              "oidc-address-mapper"
             ]
           }
         },
@@ -3810,13 +3786,13 @@
           "subComponents": {},
           "config": {
             "allowed-protocol-mapper-types": [
+              "saml-role-list-mapper",
               "oidc-usermodel-property-mapper",
               "saml-user-property-mapper",
-              "oidc-full-name-mapper",
+              "oidc-sha256-pairwise-sub-mapper",
               "oidc-address-mapper",
               "saml-user-attribute-mapper",
-              "saml-role-list-mapper",
-              "oidc-sha256-pairwise-sub-mapper",
+              "oidc-full-name-mapper",
               "oidc-usermodel-attribute-mapper"
             ]
           }
@@ -3916,40 +3892,6 @@
             "priority": 20,
             "autheticatorFlow": true,
             "flowAlias": "Verify Existing Account by Re-authentication",
-            "userSetupAllowed": false
-          }
-        ]
-      },
-      {
-        "id": "bd8e7472-65f0-4bfb-9de3-54b5166ec202",
-        "alias": "Authentication Options",
-        "description": "Authentication options.",
-        "providerId": "basic-flow",
-        "topLevel": false,
-        "builtIn": true,
-        "authenticationExecutions": [
-          {
-            "authenticator": "basic-auth",
-            "authenticatorFlow": false,
-            "requirement": "REQUIRED",
-            "priority": 10,
-            "autheticatorFlow": false,
-            "userSetupAllowed": false
-          },
-          {
-            "authenticator": "basic-auth-otp",
-            "authenticatorFlow": false,
-            "requirement": "DISABLED",
-            "priority": 20,
-            "autheticatorFlow": false,
-            "userSetupAllowed": false
-          },
-          {
-            "authenticator": "auth-spnego",
-            "authenticatorFlow": false,
-            "requirement": "DISABLED",
-            "priority": 30,
-            "autheticatorFlow": false,
             "userSetupAllowed": false
           }
         ]
@@ -4327,32 +4269,6 @@
         ]
       },
       {
-        "id": "d184c76f-0418-448c-aa8a-07be4546a7a2",
-        "alias": "http challenge",
-        "description": "An authentication flow based on challenge-response HTTP Authentication Schemes",
-        "providerId": "basic-flow",
-        "topLevel": true,
-        "builtIn": true,
-        "authenticationExecutions": [
-          {
-            "authenticator": "no-cookie-redirect",
-            "authenticatorFlow": false,
-            "requirement": "REQUIRED",
-            "priority": 10,
-            "autheticatorFlow": false,
-            "userSetupAllowed": false
-          },
-          {
-            "authenticatorFlow": true,
-            "requirement": "REQUIRED",
-            "priority": 20,
-            "autheticatorFlow": true,
-            "flowAlias": "Authentication Options",
-            "userSetupAllowed": false
-          }
-        ]
-      },
-      {
         "id": "6a4dec82-d2b6-47e4-927d-6a4abfc8f77a",
         "alias": "registration",
         "description": "registration flow",
@@ -4501,9 +4417,9 @@
         "config": {}
       },
       {
-        "alias": "terms_and_conditions",
+        "alias": "TERMS_AND_CONDITIONS",
         "name": "Terms and Conditions",
-        "providerId": "terms_and_conditions",
+        "providerId": "TERMS_AND_CONDITIONS",
         "enabled": false,
         "defaultAction": false,
         "priority": 20,
@@ -4594,7 +4510,7 @@
       "parRequestUriLifespan": "60",
       "clientSessionMaxLifespan": "0"
     },
-    "keycloakVersion": "21.0.1",
+    "keycloakVersion": "22.0.3",
     "userManagedAccessAllowed": false,
     "clientProfiles": {
       "profiles": []

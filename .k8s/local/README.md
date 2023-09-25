@@ -26,7 +26,7 @@ data:
     .:53 {
         log
         errors
-        rewrite name sso.carres.local host.minikube.internal <-------- this one
+        rewrite name sso.carres.local <your keycloak node IP address, e.g. 192.168.49.2> <-------- this one
         health {
            lameduck 5s
         }
@@ -81,3 +81,12 @@ kubectl apply -f .k8s/local/carres-\*.yaml
 ```
 
 It takes about 1 minute for the project to start due to Keycloak initialization.
+
+
+## 5. (For Windows / OSX)
+
+Run tunnelling:
+
+```
+minikube tunnel
+```
