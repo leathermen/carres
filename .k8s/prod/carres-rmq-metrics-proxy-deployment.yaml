@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carres-rmq-metrics-proxy-deployment
+  labels:
+    app: carres-rmq-metrics-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carres-rmq-metrics-proxy
+  template:
+    metadata:
+      creationTimestamp: 2022-05-15T23:33:38Z
+      labels:
+        app: carres-rmq-metrics-proxy
+    spec:
+      containers:
+        - name: carres-rmq-metrics-proxy
+          image: nikitades/carres-rmq-metrics-proxy:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: RMQ_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: carres-rmq-metrics-proxy-secret
+                  key: rmq-address
+            - name: KEYCLOAK_REALM_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: carres-rmq-metrics-proxy-secret
+                  key: keycloak-realm-address

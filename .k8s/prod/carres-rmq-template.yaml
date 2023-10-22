@@ -134,6 +134,10 @@ spec:
       port: 15672
       targetPort: stats
       nodePort: null
+    - name: http-monitoring
+      port: 15692
+      targetPort: monitoring
+      nodePort: null
   selector: 
     app.kubernetes.io/name: rabbitmq
     app.kubernetes.io/instance: rmq
@@ -274,6 +278,8 @@ spec:
               containerPort: 15672
             - name: epmd
               containerPort: 4369
+            - name: monitoring
+              containerPort: 15692
           livenessProbe:
             failureThreshold: 6
             initialDelaySeconds: 120

@@ -16,6 +16,7 @@ jobs:
       website: ${{ steps.filter.outputs.website }}
       keycloak: ${{ steps.filter.outputs.keycloak }}
       k8s: ${{ steps.filter.outputs.k8s }}
+      rmq-metrics-proxy: ${{ steps.filter.outputs.rmq-metrics-proxy }}
     steps:
       - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
@@ -30,6 +31,8 @@ jobs:
               - apps/keycloak/**
             k8s:
               - .k8s/prod/**
+            rmq-metrics-proxy:
+              - apps/rmq/metrics-proxy/**
 
   test-api:
     runs-on: ubuntu-latest
@@ -167,11 +170,39 @@ jobs:
           context: apps/keycloak
           platforms: linux/arm64,linux/amd64
 
+  build-rmq-metrics-proxy-image:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.rmq-metrics-proxy == 'true' }}
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: apps/rmq/metrics-proxy
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2
+        with:
+          platforms: linux/arm64,linux/amd64
+      - uses: docker/login-action@v2
+        with:
+          username: nikitades
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: |
+            nikitades/carres-rmq-metrics-proxy:latest
+            nikitades/carres-rmq-metrics-proxy:${{ github.sha }}
+          cache-from: type=gha,scope=carres-rmq-metrics-proxy
+          cache-to: type=gha,mode=max,scope=carres-rmq-metrics-proxy
+          context: apps/rmq/metrics-proxy
+          platforms: linux/arm64,linux/amd64
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    needs: [detect-changes, build-api-image, build-tgn-image, build-website-image, build-keycloak-image]
-    if: ${{ always() && needs.build-api-image.result != 'failure' && needs.build-tgn-image.result != 'failure' && needs.build-website-image.result != 'failure' && needs.build-keycloak-image.result != 'failure' && (github.event_name == 'pull_request' || needs.detect-changes.outputs.k8s == 'true' || needs.build-api-image.result == 'success' || needs.build-tgn-image.result == 'success' || needs.build-website-image.result == 'success' || needs.build-keycloak-image.result == 'success') }}
+    needs: [detect-changes, build-api-image, build-tgn-image, build-website-image, build-keycloak-image, build-rmq-metrics-proxy-image]
+    if: ${{ always() && needs.build-api-image.result != 'failure' && needs.build-tgn-image.result != 'failure' && needs.build-website-image.result != 'failure' && needs.build-keycloak-image.result != 'failure' && needs.build-rmq-metrics-proxy-image.result != 'failure' && (github.event_name == 'pull_request' || needs.detect-changes.outputs.k8s == 'true' || needs.build-api-image.result == 'success' || needs.build-tgn-image.result == 'success' || needs.build-website-image.result == 'success' || needs.build-keycloak-image.result == 'success' || needs.build-rmq-metrics-proxy-image.result == 'success') }}
     timeout-minutes: 15
     env:
       CURRENT_TIME:
@@ -209,6 +240,12 @@ jobs:
           propertyPath: spec.template.metadata.creationTimestamp
           value: ${{ steps.get-current-time.outputs.CURRENT_TIME }}
           commitChange: false
+      - uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: .k8s/prod/carres-rmq-metrics-proxy-deployment.yaml
+          propertyPath: spec.template.metadata.creationTimestamp
+          value: ${{ steps.get-current-time.outputs.CURRENT_TIME }}
+          commitChange: false
       - uses: azure/k8s-deploy@v4
         with:
           namespace: carres
@@ -217,4 +254,5 @@ jobs:
             nikitades/carres-api:latest
             nikitades/carres-website:latest
             nikitades/carres-keycloak:latest
+            nikitades/carres-rmq-metrics-proxy:latest
           force: true
