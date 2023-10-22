@@ -41,7 +41,7 @@ public class WebSecurityConfig {
           .requestMatchers(mvc.pattern("/actuator/health"))
           .permitAll()
           .requestMatchers(mvc.pattern("/actuator/prometheus"))
-          .hasAnyAuthority("metrics-scraper");
+          .hasAuthority("metrics-scraper");
         requests.anyRequest().authenticated();
       })
       .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
@@ -55,6 +55,7 @@ public class WebSecurityConfig {
     return new MvcRequestMatcher.Builder(introspector);
   }
 
+  @Bean
   protected JwtAuthenticationConverter authenticationConverter() {
     JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
     authoritiesConverter.setAuthorityPrefix("");
