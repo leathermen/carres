@@ -77,8 +77,10 @@ This would enable the browser to access the whole ecosystem locally.
 ## 4. Apply Kubernetes configs:
 
 ```bash
-kubectl apply -f .k8s/local/carres-\*.yaml
+kubectl apply -f .k8s/local/\*.yaml
 ```
+
+(Please remember to replace `kubectl apply` with `minikube kubectl -- apply` if you use Windows WSL)
 
 It takes about 1 minute for the project to start due to Keycloak initialization.
 
